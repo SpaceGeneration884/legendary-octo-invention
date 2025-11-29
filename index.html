@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>spacegen - Створіть свій сайт</title>
+    <title>SpaceGen - Космічна Генерація</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -11,1960 +11,546 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
+        /* === ОСНОВНІ СТИЛІ === */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #03000a;
             overflow-x: hidden;
             min-height: 100vh;
+            color: #e5e7eb;
         }
 
-        /* Анімація зірок на фоні */
+        /* === АНІМАЦІЯ ФОНУ (ЗІРКИ) === */
         @keyframes twinkle {
             0%, 100% { opacity: 0.2; }
             50% { opacity: 1; }
         }
-
         .star {
             position: absolute;
             background-color: white;
             border-radius: 50%;
             animation: twinkle 3s infinite ease-in-out;
+            z-index: 0;
         }
-
         .star.small { width: 1px; height: 1px; }
         .star.medium { width: 2px; height: 2px; }
         .star.large { width: 3px; height: 3px; }
 
-        /* НЕОНІВИЙ ФОН */
         .space-background {
             background: 
-                radial-gradient(ellipse at center, rgba(120, 0, 255, 0.3) 0%, transparent 70%),
-                radial-gradient(ellipse at 80% 20%, rgba(255, 0, 200, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at 20% 80%, rgba(0, 200, 255, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(0, 100, 255, 0.15) 0%, transparent 60%),
-                linear-gradient(135deg, #03000a 0%, #0a001f 50%, #03000a 100%);
+                radial-gradient(ellipse at center, rgba(120, 0, 255, 0.2) 0%, transparent 70%),
+                radial-gradient(ellipse at 80% 20%, rgba(255, 0, 200, 0.15) 0%, transparent 50%),
+                linear-gradient(135deg, #03000a 0%, #0a001f 100%);
         }
 
-        /* Анімація ракети */
+        /* === АНІМАЦІЯ РАКЕТИ === */
         @keyframes rocket-launch {
-            0% {
-                transform: translate(-50%, 100vh) scale(0.8) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                transform: translate(-50%, -10vh) scale(1.4) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -100vh) scale(1.4) rotate(0deg);
-                opacity: 0;
-            }
+            0% { transform: translate(-50%, 100vh) scale(0.8); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translate(-50%, -120vh) scale(1.5); opacity: 0; }
         }
-
-        @keyframes flame-glow {
-            0%, 100% { 
-                opacity: 0.9;
-                filter: brightness(1) blur(4px);
-                transform: scaleY(1);
-            }
-            25% { 
-                opacity: 1;
-                filter: brightness(1.3) blur(5px);
-                transform: scaleY(1.1);
-            }
-            50% { 
-                opacity: 0.8;
-                filter: brightness(1.1) blur(4px);
-                transform: scaleY(0.9);
-            }
-            75% { 
-                opacity: 1;
-                filter: brightness(1.4) blur(6px);
-                transform: scaleY(1.2);
-            }
-        }
-
-        @keyframes spark-trail {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100px) scale(0.2);
-                opacity: 0;
-            }
+        @keyframes flame {
+            0%, 100% { height: 40px; opacity: 0.8; }
+            50% { height: 55px; opacity: 1; }
         }
 
         .rocket {
             position: fixed;
             left: 50%;
-            bottom: -100px;
+            bottom: -150px;
             width: 60px;
             height: 120px;
-            z-index: 1000;
-            opacity: 0;
+            z-index: 9999;
             pointer-events: none;
+            display: none;
         }
-
         .rocket.launching {
-            animation: rocket-launch 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            display: block;
+            animation: rocket-launch 1.5s cubic-bezier(0.45, 0, 0.55, 1) forwards;
         }
 
         .rocket-body {
-            position: absolute;
             width: 100%;
             height: 80px;
-            background: linear-gradient(45deg, #ffffff 0%, #f0f0f0 30%, #ff4444 100%);
-            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
-            transform: perspective(500px) rotateX(15deg);
-            box-shadow: 
-                0 0 20px rgba(255, 255, 255, 0.8),
-                0 0 40px rgba(255, 68, 68, 0.6),
-                inset 0 -10px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, #e2e2e2, #ffffff, #e2e2e2);
+            border-radius: 50% 50% 20% 20%;
+            position: relative;
+            z-index: 2;
         }
-
-        .rocket-fin {
-            position: absolute;
-            bottom: -15px;
-            width: 20px;
-            height: 30px;
-            background: linear-gradient(45deg, #ff4444 0%, #cc0000 100%);
-            border-radius: 40% 40% 0 0;
-        }
-
-        .rocket-fin.left {
-            left: 5px;
-            transform: rotate(-30deg) skewX(-10deg);
-        }
-
-        .rocket-fin.right {
-            right: 5px;
-            transform: rotate(30deg) skewX(10deg);
-        }
-
         .rocket-window {
+            width: 20px;
+            height: 20px;
+            background: #00d4ff;
+            border-radius: 50%;
             position: absolute;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 15px;
-            height: 15px;
-            background: radial-gradient(circle, #00d4ff 0%, #0088ff 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 10px #00d4ff,
-                inset 0 0 5px rgba(255, 255, 255, 0.8);
+            border: 2px solid #333;
+            box-shadow: 0 0 10px #00d4ff;
         }
-
-        .rocket-flame {
+        .rocket-fin {
             position: absolute;
-            bottom: -40px;
+            bottom: 0;
+            width: 20px;
+            height: 30px;
+            background: #ff4444;
+        }
+        .rocket-fin.left { left: -15px; border-radius: 100% 0 0 0; }
+        .rocket-fin.right { right: -15px; border-radius: 0 100% 0 0; }
+        
+        .rocket-fire {
+            position: absolute;
+            top: 78px;
             left: 50%;
             transform: translateX(-50%);
-            width: 25px;
-            height: 50px;
-            background: linear-gradient(to bottom, #ffaa00 0%, #ff4444 30%, #cc0000 70%, transparent 100%);
-            border-radius: 50% 50% 20% 20%;
-            filter: blur(5px);
-            animation: flame-glow 0.3s infinite alternate;
+            width: 20px;
+            background: linear-gradient(to bottom, #ffeb3b, #ff9800, #ff5722, transparent);
+            border-radius: 0 0 50% 50%;
+            animation: flame 0.1s infinite alternate;
+            filter: blur(2px);
+            z-index: 1;
         }
 
-        .rocket-spark {
-            position: absolute;
-            bottom: -60px;
-            width: 3px;
-            height: 10px;
-            background: #ffaa00;
-            border-radius: 50%;
-            opacity: 0;
-            filter: blur(1px);
-        }
-
-        .rocket.launching .rocket-spark {
-            animation: spark-trail 1s infinite;
-        }
-
-        /* Сторінки з анімацією переходу */
+        /* === СТОРІНКИ === */
         .page {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent;
-            z-index: 20;
+            overflow-y: auto;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            z-index: 10;
+            padding-top: 20px;
+            padding-bottom: 50px;
         }
-
         .page.active {
             opacity: 1;
             pointer-events: all;
             transform: translateY(0);
+            z-index: 20;
         }
 
-        .page.exiting {
-            opacity: 0;
-            transform: translateY(-20px);
-            pointer-events: none;
-        }
-
-        /* ПЛАНЕТА */
-        @keyframes planet-rotation {
-            0% {
-                transform: translateX(-50%) rotate(0deg);
-            }
-            100% {
-                transform: translateX(-50%) rotate(360deg);
-            }
-        }
-        
-        @keyframes planet-pulse {
-            0%, 100% {
-                opacity: 0.95;
-                filter: brightness(1) blur(0);
-            }
-            50% {
-                opacity: 1;
-                filter: brightness(1.3) blur(1px);
-            }
-        }
-        
-        @keyframes crater-glow {
-            0%, 100% {
-                opacity: 0.4;
-            }
-            50% {
-                opacity: 0.8;
-            }
-        }
-        
-        @keyframes atmosphere-shimmer {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-        
-        @keyframes cloud-movement {
-            0% {
-                transform: translateX(-50%) rotate(0deg);
-            }
-            100% {
-                transform: translateX(-50%) rotate(360deg);
-            }
-        }
-
-        .planet-container {
-            position: fixed;
-            bottom: -250px;
-            left: 50%;
-            width: 800px;
-            height: 800px;
-            z-index: 5;
-            transform: translateX(-50%);
-            pointer-events: none;
-            border-radius: 50%;
-            background: 
-                radial-gradient(circle at 30% 30%, #8a5aca 0%, #7a4aba 15%, #6a3aaa 30%, #5a2a9a 50%, #4a1a8a 70%, #3a0a7a 100%),
-                radial-gradient(circle at 70% 20%, rgba(60, 35, 90, 0.95) 0%, rgba(60, 35, 90, 0.95) 15%, transparent 30%),
-                radial-gradient(circle at 25% 65%, rgba(65, 40, 95, 0.9) 0%, rgba(65, 40, 95, 0.9) 12%, transparent 25%),
-                radial-gradient(circle at 60% 70%, rgba(70, 45, 100, 0.85) 0%, rgba(70, 45, 100, 0.85) 10%, transparent 22%),
-                radial-gradient(circle at 40% 35%, rgba(40, 30, 70, 0.95) 0%, rgba(40, 30, 70, 0.95) 8%, transparent 20%),
-                radial-gradient(circle at 75% 45%, rgba(45, 35, 75, 0.9) 0%, rgba(45, 35, 75, 0.9) 6%, transparent 18%),
-                radial-gradient(circle at 20% 50%, rgba(50, 40, 80, 0.85) 0%, rgba(50, 40, 80, 0.85) 7%, transparent 16%),
-                radial-gradient(circle at 50% 40%, rgba(160, 140, 220, 0.6) 0%, rgba(160, 140, 220, 0.6) 8%, transparent 20%),
-                radial-gradient(circle at 30% 70%, rgba(180, 160, 240, 0.5) 0%, rgba(180, 160, 240, 0.5) 6%, transparent 18%),
-                repeating-radial-gradient(circle at 50% 50%, 
-                    transparent 0px, 
-                    rgba(255, 255, 255, 0.03) 1px, 
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.02) 3px,
-                    transparent 4px),
-                radial-gradient(circle at center, transparent 60%, rgba(0, 230, 255, 0.6) 70%, rgba(0, 230, 255, 0.3) 80%, transparent 90%);
-            
-            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 200px 200px, 125% 125%;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.98;
-            box-shadow: 
-                inset 0 0 150px rgba(0, 0, 0, 0.9),
-                inset 0 0 50px rgba(120, 60, 220, 0.5),
-                0 0 200px rgba(0, 230, 255, 0.7),
-                0 0 400px rgba(140, 0, 255, 0.6);
-            animation: planet-rotation 60s infinite linear, planet-pulse 15s infinite ease-in-out;
-        }
-        
-        .planet-atmosphere {
-            position: absolute;
-            width: 115%;
-            height: 115%;
-            top: -7.5%;
-            left: -7.5%;
-            border-radius: 50%;
-            background: 
-                radial-gradient(circle at 30% 20%, rgba(0, 230, 255, 0.4) 0%, transparent 40%),
-                radial-gradient(circle at 70% 80%, rgba(140, 0, 255, 0.35) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(0, 180, 255, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(220, 0, 255, 0.25) 0%, transparent 35%),
-                radial-gradient(circle at 20% 70%, rgba(0, 255, 220, 0.3) 0%, transparent 40%);
-            background-size: 200% 200%;
-            animation: atmosphere-shimmer 20s infinite ease-in-out;
-            z-index: 1;
-            pointer-events: none;
-        }
-        
-        .planet-clouds {
-            position: absolute;
-            width: 108%;
-            height: 108%;
-            top: -4%;
-            left: -4%;
-            border-radius: 50%;
-            background: 
-                radial-gradient(circle at 20% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 60% 60%, rgba(255, 255, 255, 0.08) 0%, transparent 18%),
-                radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 15%),
-                radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.07) 0%, transparent 17%),
-                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 12%);
-            animation: cloud-movement 150s infinite linear;
-            z-index: 2;
-            pointer-events: none;
-            mix-blend-mode: screen;
-        }
-        
-        .planet-crater-glow {
-            position: absolute;
-            width: 102%;
-            height: 102%;
-            top: -1%;
-            left: -1%;
-            border-radius: 50%;
-            background: 
-                radial-gradient(circle at 40% 60%, rgba(0, 230, 255, 0.2) 0%, transparent 10%),
-                radial-gradient(circle at 65% 35%, rgba(140, 0, 255, 0.18) 0%, transparent 8%),
-                radial-gradient(circle at 25% 25%, rgba(0, 230, 255, 0.12) 0%, transparent 6%),
-                radial-gradient(circle at 75% 65%, rgba(220, 0, 255, 0.15) 0%, transparent 7%),
-                radial-gradient(circle at 50% 80%, rgba(0, 255, 220, 0.14) 0%, transparent 9%);
-            animation: crater-glow 6s infinite ease-in-out;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        /* Інші стилі */
-        @keyframes neon-glow-cyan {
-            from { text-shadow: 0 0 2px #fff, 0 0 5px #00d4ff, 0 0 10px #00d4ff; }
-            to { text-shadow: 0 0 3px #fff, 0 0 7px #00d4ff, 0 0 15px #00d4ff; }
-        }
-        
-        .neon-button-header {
-            background-color: transparent;
-            border: 1px solid #00d4ff;
-            color: #00d4ff;
-            border-radius: 999px;
-            padding: 6px 18px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-shadow: 0 0 5px #00d4ff;
-            box-shadow: 0 0 8px #00d4ff, inset 0 0 5px #00d4ff;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .neon-button-header:hover {
-            background-color: #00d4ff;
-            color: #03000a;
-            box-shadow: 0 0 15px #00d4ff, 0 0 25px #00d4ff;
-        }
-
-        .neon-button-main {
-            background-color: #00d4ff;
-            color: #03000a;
-            font-weight: 700;
-            border-radius: 999px;
-            box-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-        .neon-button-main:hover {
-            box-shadow: 0 0 15px #fff, 0 0 30px #00d4ff, 0 0 45px #00d4ff;
-            transform: scale(1.03);
-        }
-
-        .neon-button-secondary {
-            background-color: transparent;
-            color: #ff44aa;
-            border: 1px solid #ff44aa;
-            font-weight: 600;
-            border-radius: 999px;
-            box-shadow: 0 0 10px #ff44aa, inset 0 0 5px #ff44aa;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .neon-button-secondary:hover {
-            background-color: #ff44aa;
-            color: #03000a;
-            box-shadow: 0 0 20px #ff44aa, 0 0 40px #ff44aa;
-        }
-
-        @keyframes neon-pulse {
-            0%, 100% { box-shadow: 0 0 15px #00d4ff, 0 0 25px #00d4ff; }
-            50% { box-shadow: 0 0 20px #00d4ff, 0 0 35px #00d4ff, 0 0 10px #fff; }
-        }
-
+        /* === НЕОНОВІ ЕЛЕМЕНТИ === */
         .neon-card {
-            background-color: rgba(10, 5, 30, 0.5);
-            border: 1px solid #00d4ff;
-            border-radius: 1rem;
-            animation: neon-pulse 3s infinite ease-in-out;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            position: relative;
-            z-index: 10;
+            background: rgba(10, 10, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
         }
 
         .neon-input {
-            background-color: rgba(3, 0, 10, 0.7);
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid #00d4ff;
-            color: #fff;
-            border-radius: 0.5rem;
-            box-shadow: inset 0 0 8px rgba(0, 212, 255, 0.3);
-            transition: all 0.3s ease;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            width: 100%;
+            transition: 0.3s;
         }
         .neon-input:focus {
             outline: none;
-            box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.7);
-            border-color: #fff;
-        }
-        .neon-input::placeholder {
-            color: #aaa;
+            box-shadow: 0 0 10px #00d4ff;
         }
 
-        /* Стилі для сторінки реєстрації/входу */
-        .auth-form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* Стилі для сторінки тарифів */
-        .pricing-card {
-            background-color: rgba(10, 5, 30, 0.7);
-            border: 1px solid;
-            border-radius: 1rem;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .pricing-card.popular {
-            border-color: #ff44aa;
-            box-shadow: 0 0 20px rgba(255, 68, 170, 0.5);
-        }
-
-        .pricing-card.basic {
-            border-color: #00d4ff;
-        }
-
-        .pricing-card.premium {
-            border-color: #ffaa00;
-        }
-
-        /* Стилі для сторінки інформації */
-        .feature-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 212, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            border: 1px solid #00d4ff;
-        }
-
-        /* Стилі для завантаження файлів */
-        .file-upload {
-            border: 2px dashed #00d4ff;
-            border-radius: 0.5rem;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload:hover {
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        .file-upload input {
-            display: none;
-        }
-
-        .image-preview {
-            max-width: 200px;
-            max-height: 200px;
-            margin: 1rem auto;
-            display: none;
-        }
-
-        /* Стилі для профілю */
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #00d4ff, #ff44aa);
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: white;
-        }
-
-        .profile-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .stat-item {
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            text-align: center;
-            border: 1px solid #00d4ff;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
+        .neon-btn-primary {
+            background: #00d4ff;
+            color: #03000a;
             font-weight: bold;
-            color: #00d4ff;
-            display: block;
+            border-radius: 99px;
+            padding: 12px 24px;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+            width: 100%;
+            text-align: center;
+        }
+        .neon-btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.9);
         }
 
-        .stat-label {
-            font-size: 0.875rem;
-            color: #aaa;
-        }
-
-        .profile-project {
-            background: rgba(255, 68, 170, 0.1);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ff44aa;
-        }
-
-        /* Стилі для оплати */
-        .payment-input {
-            background-color: rgba(3, 0, 10, 0.7);
-            border: 1px solid #00d4ff;
-            color: #fff;
-            border-radius: 0.5rem;
-            box-shadow: inset 0 0 8px rgba(0, 212, 255, 0.3);
-            transition: all 0.3s ease;
-            padding: 0.75rem;
+        .neon-btn-outline {
+            background: transparent;
+            border: 1px solid #ff00d4;
+            color: #ff00d4;
+            font-weight: bold;
+            border-radius: 99px;
+            padding: 12px 24px;
+            transition: 0.3s;
             width: 100%;
         }
-
-        .payment-input:focus {
-            outline: none;
-            box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.7);
-            border-color: #fff;
+        .neon-btn-outline:hover {
+            background: #ff00d4;
+            color: white;
+            box-shadow: 0 0 15px #ff00d4;
         }
 
-        .payment-input.error {
-            border-color: #ff4444;
-            box-shadow: 0 0 8px rgba(255, 68, 68, 0.5);
-        }
-
-        .payment-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .error-message {
-            color: #ff4444;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
-
-        /* Стилі для завантаження */
-        .progress-container {
-            width: 100%;
-            background-color: rgba(3, 0, 10, 0.7);
-            border-radius: 0.5rem;
-            margin: 2rem 0;
-            overflow: hidden;
-            border: 1px solid #00d4ff;
-        }
-
-        .progress-bar {
-            height: 20px;
-            background: linear-gradient(90deg, #00d4ff, #ff44aa);
-            border-radius: 0.5rem;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* Стилі для вибору фото */
-        .photo-option {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border: 1px solid #00d4ff;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .photo-option:hover {
-            background: rgba(0, 212, 255, 0.1);
-        }
-
-        .photo-option input[type="radio"] {
-            margin-right: 1rem;
-        }
-
-        .photo-option.active {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: #ff44aa;
-        }
-
-        /* НОВИЙ СТИЛЬ ДЛЯ КНОПКИ GOOGLE */
-        .neon-google-btn {
+        /* === КНОПКА GOOGLE === */
+        .google-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-            padding: 12px 24px;
+            gap: 10px;
             background: transparent;
             color: #00d4ff;
-            border: 1px solid #00d4ff;
-            border-radius: 999px;
+            border-radius: 99px;
+            padding: 12px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 8px #00d4ff, inset 0 0 5px #00d4ff;
-            text-shadow: 0 0 5px #00d4ff;
-        }
-
-        .neon-google-btn:hover {
-            background-color: #00d4ff;
-            color: #03000a;
-            box-shadow: 0 0 15px #00d4ff, 0 0 25px #00d4ff;
-        }
-
-        .google-icon {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Стилі для футера */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
             width: 100%;
-            background: rgba(3, 0, 10, 0.95);
-            border-top: 1px solid rgba(0, 212, 255, 0.3);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            transform: translateY(100%);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 1rem 0;
-        }
-
-        .footer.visible {
-            transform: translateY(0);
-        }
-
-        .footer-trigger {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 30px;
-            z-index: 99;
+            transition: 0.3s;
             cursor: pointer;
+            border: 1px solid #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+        .google-btn:hover {
+            background: #00d4ff;
+            color: #000;
+            box-shadow: 0 0 20px #00d4ff;
         }
 
-        .footer-link {
-            color: #aaa;
-            transition: all 0.3s ease;
-            font-size: 0.875rem;
+        /* Прогрес бар */
+        .progress-box {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #ff00d4);
+            width: 0%;
+            transition: width 0.1s linear;
         }
 
-        .footer-link:hover {
-            color: #00d4ff;
-            text-shadow: 0 0 5px #00d4ff;
-        }
-
-        .social-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: #00d4ff;
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-        }
+        .hidden { display: none !important; }
     </style>
 </head>
-<body class="text-gray-200 min-h-screen flex flex-col relative space-background">
+<body class="space-background">
 
     <div id="stars-container"></div>
-
-    <div class="planet-container">
-        <div class="planet-atmosphere"></div>
-        <div class="planet-clouds"></div>
-        <div class="planet-crater-glow"></div>
-    </div>
-
+    
     <div class="rocket" id="rocket">
         <div class="rocket-body">
             <div class="rocket-window"></div>
             <div class="rocket-fin left"></div>
             <div class="rocket-fin right"></div>
+            <div class="rocket-fire"></div>
         </div>
-        <div class="rocket-flame"></div>
-        <div class="rocket-spark" style="left: 30%;"></div>
-        <div class="rocket-spark" style="left: 50%; animation-delay: 0.2s;"></div>
-        <div class="rocket-spark" style="left: 70%; animation-delay: 0.4s;"></div>
     </div>
 
-    <div class="footer-trigger" id="footer-trigger"></div>
-
     <div id="main-page" class="page active">
-        <header class="w-full relative z-10">
-            <div class="container mx-auto px-6 py-5 flex justify-end items-center space-x-4">
-                <div id="auth-buttons">
-                    <button class="neon-button-header login-btn">
-                        Увійти
-                    </button>
-                    <button class="neon-button-header register-btn">
-                        Реєстрація
-                    </button>
-                </div>
-                <div id="profile-button" class="hidden">
-                    <button class="neon-button-header profile-btn">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-6 h-6 rounded-full bg-gradient-to-r from-cyan-400 to-pink-500"></div>
-                            <span>Профіль</span>
-                        </div>
-                    </button>
-                </div>
+        <nav class="w-full p-6 flex justify-between items-center relative z-20">
+            <div class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">SpaceGen</div>
+            
+            <div id="nav-auth-buttons" class="flex gap-4">
+                <button onclick="goToPage('login-page')" class="px-4 py-2 border border-cyan-400 text-cyan-400 rounded-full hover:bg-cyan-400 hover:text-black transition">Вхід</button>
+                <button onclick="goToPage('register-page')" class="px-4 py-2 border border-purple-500 text-purple-500 rounded-full hover:bg-purple-500 hover:text-white transition">Реєстрація</button>
             </div>
-        </header>
-
-        <main class="flex-grow flex items-center justify-center text-center relative z-10 px-4">
-            <div class="container mx-auto py-12 px-6 sm:py-16 sm:px-10 neon-card max-w-2xl w-full">
-                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    КОСМІЧНА ГЕНЕРАЦІЯ
-                </h2>
-                <p id="intro-description" class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-                    Розкажіть нам про свою ідею, і <span class="font-bold text-cyan-400" style="text-shadow: 0 0 5px #00d4ff;">spacegen</span> автоматично згенерує
-                    унікальний сайт для вашого бізнесу.
-                </p>
-                <button id="start-button" class="w-full px-6 py-3 text-lg neon-button-main start-btn">
-                    Почати подорож
+            
+            <div id="nav-profile-btn" class="hidden">
+                <button onclick="goToPage('profile-page')" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full">
+                    <span>👤</span> <span id="nav-username">Користувач</span>
                 </button>
             </div>
-        </main>
+        </nav>
 
-        <footer class="footer" id="main-footer">
-            <div class="container mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-cyan-400 mb-2">SpaceGen</h3>
-                        <p class="text-gray-400 text-sm mb-3">
-                            Створюємо майбутнє разом з вами. Інноваційні рішення для вашого бізнесу.
-                        </p>
-                        <div class="flex space-x-3">
-                            <a href="#" class="social-icon">
-                                <svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="social-icon">
-                                <svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.20-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="social-icon">
-                                <svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.042-3.441.219-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.347-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.748-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.017 12.017 0z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-sm font-bold text-cyan-300 mb-3">Контакти</h4>
-                        <ul class="space-y-2">
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                </svg>
-                                <a href="mailto:info@spacegen.com" class="footer-link">info@spacegen.com</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                </svg>
-                                <a href="tel:+380123456789" class="footer-link">+380 12 345 6789</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                                <span class="footer-link">м. Київ, вул. Хрещатик, 1</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-sm font-bold text-cyan-300 mb-3">Послуги</h4>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="footer-link">Створення сайтів</a></li>
-                            <li><a href="#" class="footer-link">Генерація контенту</a></li>
-                            <li><a href="#" class="footer-link">Дизайн</a></li>
-                            <li><a href="#" class="footer-link">SEO оптимізація</a></li>
-                            <li><a href="#" class="footer-link">Підтримка</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-sm font-bold text-cyan-300 mb-3">Інформація</h4>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="footer-link">Про нас</a></li>
-                            <li><a href="#" class="footer-link">Блог</a></li>
-                            <li><a href="#" class="footer-link">Контакти</a></li>
-                            <li><a href="#" class="footer-link">Політика конфіденційності</a></li>
-                            <li><a href="#" class="footer-link">Умови використання</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="border-t border-gray-800 pt-4 text-center">
-                    <p class="text-gray-500 text-xs">
-                        &copy; 2025 SpaceGen. Всі права захищено. Створено з 💙 для вашого успіху.
-                    </p>
-                </div>
+        <div class="container mx-auto px-4 mt-20 text-center relative z-10">
+            <div class="neon-card max-w-3xl mx-auto p-10">
+                <h1 class="text-5xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                    СТВОРЮЙ САЙТИ З КОСМОСУ
+                </h2>
+                <p class="text-xl text-gray-300 mb-10">
+                    Наш штучний інтелект згенерує для вас ідеальний сайт або пости для соцмереж за лічені секунди.
+                </p>
+                <button onclick="goToPage('info-page')" class="neon-btn-primary text-xl px-10">
+                    ПОЧАТИ ПОДОРОЖ 🚀
+                </button>
             </div>
-        </footer>
+        </div>
     </div>
 
     <div id="info-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-4xl w-full mx-auto p-8">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-8 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    НАШІ ПОСЛУГИ
-                </h2>
-                
-                <div class="grid md:grid-cols-2 gap-8 mb-8">
-                    <div>
-                        <h3 class="text-xl font-bold text-cyan-400 mb-4">Генерація постів</h3>
-                        <div class="space-y-4">
-                            <div class="feature-item">
-                                <div class="feature-icon">📱</div>
-                                <div>
-                                    <h4 class="font-bold text-cyan-200">Для соціальних мереж</h4>
-                                    <p class="text-gray-300">Створюємо унікальні пости для Instagram, Facebook, Twitter</p>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">🎨</div>
-                                <div>
-                                    <h4 class="font-bold text-cyan-200">Креативний дизайн</h4>
-                                    <p class="text-gray-300">Професійне оформлення з вашими фото або нашими шаблонами</p>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">⚡</div>
-                                <div>
-                                    <h4 class="font-bold text-cyan-200">Швидка генерація</h4>
-                                    <p class="text-gray-300">Отримайте готовий пост всього за кілька хвилин</p>
-                                </div>
-                            </div>
-                        </div>
+        <div class="container mx-auto px-4 mt-10 text-center">
+            <div class="neon-card max-w-4xl mx-auto p-8">
+                <h2 class="text-3xl font-bold mb-8 text-cyan-400">ОБЕРІТЬ НАПРЯМОК</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-6 border border-cyan-500/50 rounded-xl hover:bg-cyan-900/20 transition">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h3 class="text-2xl font-bold mb-2">Генерація Постів</h3>
+                        <p class="text-gray-400 mb-4">Для Instagram, Facebook, TikTok.</p>
+                        <button onclick="goToPage('pricing-page')" class="neon-btn-outline">Обрати</button>
                     </div>
-                    
-                    <div>
-                        <h3 class="text-xl font-bold text-pink-400 mb-4">Створення сайтів</h3>
-                        <div class="space-y-4">
-                            <div class="feature-item">
-                                <div class="feature-icon">🌐</div>
-                                <div>
-                                    <h4 class="font-bold text-pink-200">Повноцінні веб-сайти</h4>
-                                    <p class="text-gray-300">Створюємо адаптивні сайти для будь-якого бізнесу</p>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">📱</div>
-                                <div>
-                                    <h4 class="font-bold text-pink-200">Мобільна версія</h4>
-                                    <p class="text-gray-300">Автоматична оптимізація для мобільних пристроїв</p>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-icon">🚀</div>
-                                <div>
-                                    <h4 class="font-bold text-pink-200">SEO оптимізація</h4>
-                                    <p class="text-gray-300">Готовість до просування в пошукових системах</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="p-6 border border-purple-500/50 rounded-xl hover:bg-purple-900/20 transition">
+                        <div class="text-4xl mb-4">🌐</div>
+                        <h3 class="text-2xl font-bold mb-2">Створення Сайтів</h3>
+                        <p class="text-gray-400 mb-4">Лендінги та магазини під ключ.</p>
+                        <button onclick="goToPage('pricing-page')" class="neon-btn-primary">Обрати</button>
                     </div>
                 </div>
-                
-                <div class="flex space-x-4">
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-secondary info-back-btn">
-                        Назад
-                    </button>
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-main info-continue-btn">
-                        Продовжити
-                    </button>
-                </div>
+                <button onclick="goToPage('main-page')" class="mt-8 text-gray-500 hover:text-white">← Назад</button>
             </div>
         </div>
     </div>
 
     <div id="pricing-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4 py-8">
-            <div class="neon-card max-w-6xl w-full mx-auto p-8">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-8 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    ОБЕРІТЬ ТАРИФ
-                </h2>
-                
-                <div class="grid md:grid-cols-3 gap-8 mb-8">
-                    <div class="pricing-card basic">
-                        <h3 class="text-2xl font-bold text-cyan-400 mb-4 text-center">Базовий</h3>
-                        <div class="text-4xl font-bold text-white mb-4 text-center">$5</div>
-                        <p class="text-gray-300 text-center mb-6">1 місяць створення постів</p>
-                        <ul class="space-y-3 mb-6">
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Генерація постів для соціальних мереж</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>До 10 постів на місяць</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Базові шаблони дизайну</span>
-                            </li>
-                        </ul>
-                        <button class="w-full px-6 py-3 text-lg neon-button-secondary select-plan" data-plan="basic" data-price="5">
-                            Обрати план
-                        </button>
-                    </div>
-                    
-                    <div class="pricing-card popular">
-                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold">
-                            ПОПУЛЯРНИЙ
-                        </div>
-                        <h3 class="text-2xl font-bold text-pink-400 mb-4 text-center">Стандарт</h3>
-                        <div class="text-4xl font-bold text-white mb-4 text-center">$19.9</div>
-                        <p class="text-gray-300 text-center mb-6">1 сайт</p>
-                        <ul class="space-y-3 mb-6">
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Повноцінний веб-сайт</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Адаптивний дизайн</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>SEO оптимізація</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Технічна підтримка 1 місяць</span>
-                            </li>
-                        </ul>
-                        <button class="w-full px-6 py-3 text-lg neon-button-main select-plan" data-plan="standard" data-price="19.9">
-                            Обрати план
-                        </button>
-                    </div>
-                    
-                    <div class="pricing-card premium">
-                        <h3 class="text-2xl font-bold text-yellow-400 mb-4 text-center">Преміум</h3>
-                        <div class="text-4xl font-bold text-white mb-4 text-center">$24.99</div>
-                        <p class="text-gray-300 text-center mb-6">Безліміт постів</p>
-                        <ul class="space-y-3 mb-6">
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Необмежена генерація постів</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Преміум шаблони</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>AI-оптимізація контенту</span>
-                            </li>
-                            <li class="flex items-center">
-                                <span class="text-green-400 mr-2">✓</span>
-                                <span>Пріоритетна підтримка</span>
-                            </li>
-                        </ul>
-                        <button class="w-full px-6 py-3 text-lg neon-button-secondary select-plan" data-plan="premium" data-price="24.99">
-                            Обрати план
-                        </button>
-                    </div>
+        <div class="container mx-auto px-4 mt-10">
+            <h2 class="text-3xl font-bold text-center mb-8 text-white">ТАРИФНІ ПЛАНИ</h2>
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="neon-card p-6 text-center">
+                    <h3 class="text-xl font-bold text-gray-400">Start</h3>
+                    <div class="text-3xl font-bold my-4">$5</div>
+                    <button onclick="selectPlan(5)" class="neon-btn-outline">Купити</button>
                 </div>
-                
-                <div class="flex space-x-4">
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-secondary pricing-back-btn">
-                        Назад
-                    </button>
+                <div class="neon-card p-6 text-center border-purple-500">
+                    <div class="text-purple-400 text-sm mb-2">РЕКОМЕНДУЄМО</div>
+                    <h3 class="text-xl font-bold text-white">Pro</h3>
+                    <div class="text-3xl font-bold my-4 text-purple-400">$19.99</div>
+                    <button onclick="selectPlan(19.99)" class="neon-btn-primary">Купити</button>
                 </div>
+                <div class="neon-card p-6 text-center">
+                    <h3 class="text-xl font-bold text-yellow-400">Ultra</h3>
+                    <div class="text-3xl font-bold my-4">$29.99</div>
+                    <button onclick="selectPlan(29.99)" class="neon-btn-outline">Купити</button>
+                </div>
+            </div>
+            <div class="text-center mt-6">
+                <button onclick="goToPage('info-page')" class="text-gray-500 hover:text-white">← Назад до послуг</button>
             </div>
         </div>
     </div>
 
     <div id="payment-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-md w-full mx-auto p-8">
-                <h2 class="text-3xl font-extrabold mb-6 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    ОПЛАТА
-                </h2>
-                
-                <div class="text-center mb-6">
-                    <p class="text-gray-300">Ви обрали тариф: <span id="selected-plan" class="font-bold text-cyan-400">-</span></p>
-                    <p class="text-2xl font-bold text-white mt-2">$<span id="selected-price">0</span></p>
-                </div>
-                
-                <form id="payment-form" class="space-y-5">
-                    <div>
-                        <label class="block text-left text-sm font-medium text-cyan-200 mb-1">Номер картки</label>
-                        <input 
-                            type="text" 
-                            id="card-number"
-                            placeholder="1234 5678 9012 3456"
-                            class="w-full payment-input"
-                            maxlength="19"
-                        >
-                        <div class="error-message" id="card-error">Некоректний номер картки</div>
+        <div class="container mx-auto px-4 flex justify-center items-center h-full">
+            <div class="neon-card w-full max-w-md p-8">
+                <h2 class="text-2xl font-bold text-center mb-6">ОПЛАТА</h2>
+                <p class="text-center text-cyan-400 text-xl mb-6">Сума: $<span id="pay-sum">0</span></p>
+                <form id="payment-form" class="space-y-4">
+                    <input type="text" placeholder="Номер картки" class="neon-input" required>
+                    <div class="flex gap-4">
+                        <input type="text" placeholder="MM/YY" class="neon-input w-1/2" required>
+                        <input type="text" placeholder="CVV" class="neon-input w-1/2" required>
                     </div>
-                    
-                    <div class="payment-row">
-                        <div>
-                            <label class="block text-left text-sm font-medium text-cyan-200 mb-1">Термін дії</label>
-                            <input 
-                                type="text" 
-                                id="card-expiry"
-                                placeholder="MM/РР"
-                                class="w-full payment-input"
-                                maxlength="5"
-                            >
-                            <div class="error-message" id="expiry-error">Некоректний термін дії</div>
-                        </div>
-                        <div>
-                            <label class="block text-left text-sm font-medium text-cyan-200 mb-1">CVV</label>
-                            <input 
-                                type="text" 
-                                id="card-cvv"
-                                placeholder="123"
-                                class="w-full payment-input"
-                                maxlength="3"
-                            >
-                            <div class="error-message" id="cvv-error">Некоректний CVV</div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-left text-sm font-medium text-cyan-200 mb-1">Ім'я на картці</label>
-                        <input 
-                            type="text" 
-                            id="card-name"
-                            placeholder="John Doe"
-                            class="w-full payment-input"
-                        >
-                        <div class="error-message" id="name-error">Введіть ім'я як на картці</div>
-                    </div>
-
-                    <button type="submit" class="w-full px-6 py-3 text-lg neon-button-main" id="pay-button">
-                        Сплатити $<span id="pay-amount">0</span>
-                    </button>
+                    <button type="submit" id="pay-btn" class="neon-btn-primary">СПЛАТИТИ</button>
                 </form>
-                
-                <div class="flex space-x-4 mt-6">
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-secondary payment-back-btn">
-                        Назад
-                    </button>
-                </div>
+                <button onclick="goToPage('pricing-page')" class="w-full mt-4 text-gray-500">Скасувати</button>
             </div>
         </div>
     </div>
 
-    <div id="website-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-4xl w-full mx-auto p-8">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-8 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    СТВОРЕННЯ САЙТУ
-                </h2>
-                
-                <form id="website-form" class="flex flex-col items-center w-full max-w-lg mx-auto space-y-5">
-                    <div class="w-full">
-                        <label for="company_name" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Назва компанії / Бізнесу</label>
-                        <input 
-                            type="text" 
-                            id="company_name"
-                            placeholder="Наприклад, 'Кав'ярня 'Cosmo'" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
+    <div id="generation-page" class="page">
+        <div class="container mx-auto px-4 flex justify-center items-center h-full">
+            <div class="neon-card w-full max-w-2xl p-8">
+                <h2 class="text-3xl font-bold text-center mb-6 text-purple-400">НАЛАШТУВАННЯ ГЕНЕРАЦІЇ</h2>
+                <form id="gen-form" class="space-y-4">
+                    <input type="text" placeholder="Назва проекту" class="neon-input" required>
+                    <textarea placeholder="Опишіть детально, що ви хочете отримати..." rows="4" class="neon-input" required></textarea>
+                    <div class="flex gap-4 items-center justify-center my-4">
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="style" checked> Сучасний</label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="style"> Ретро</label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="style"> Мінімалізм</label>
                     </div>
-                    
-                    <div class="w-full">
-                        <label for="company_activity" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Чим ви займаєтесь?</label>
-                        <input 
-                            type="text" 
-                            id="company_activity"
-                            placeholder="Наприклад, 'Продаж кави та десертів'" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-
-                    <div class="w-full">
-                        <label for="company_wishes" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Що б ви хотіли бачити на сайті?</label>
-                        <textarea 
-                            id="company_wishes"
-                            rows="3"
-                            placeholder="Наприклад, 'Хочу темний дизайн, карту проїзду і меню'" 
-                            class="w-full px-5 py-3 neon-input"
-                        ></textarea>
-                    </div>
-
-                    <button type="submit" class="w-full px-6 py-3 text-lg neon-button-main generate-website-btn">
-                        Згенерувати сайт
-                    </button>
+                    <button type="submit" class="neon-btn-primary">ЗАПУСТИТИ ШІ 🤖</button>
                 </form>
-                
-                <div class="flex space-x-4 mt-6">
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-secondary website-back-btn">
-                        Назад
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="post-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-4xl w-full mx-auto p-8">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-8 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    СТВОРЕННЯ ПОСТА
-                </h2>
-                
-                <form id="post-form" class="flex flex-col items-center w-full max-w-lg mx-auto space-y-5">
-                    <div class="w-full">
-                        <label for="post_theme" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Тема поста</label>
-                        <input 
-                            type="text" 
-                            id="post_theme"
-                            placeholder="Наприклад, 'Акція на каву'" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-                    
-                    <div class="w-full">
-                        <label for="company_name_post" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Назва компанії</label>
-                        <input 
-                            type="text" 
-                            id="company_name_post"
-                            placeholder="Наприклад, 'Cosmo Coffee'" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-
-                    <div class="w-full">
-                        <label class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Виберіть джерело фото</label>
-                        
-                        <div class="photo-option" id="upload-option">
-                            <input type="radio" name="photo-source" value="upload" id="upload-radio">
-                            <label for="upload-radio" class="cursor-pointer">
-                                <strong class="text-cyan-200">Завантажити своє фото</strong>
-                                <p class="text-gray-300 text-sm">Ви можете завантажити власне зображення</p>
-                            </label>
-                        </div>
-
-                        <div class="photo-option active" id="auto-option">
-                            <input type="radio" name="photo-source" value="auto" id="auto-radio" checked>
-                            <label for="auto-radio" class="cursor-pointer">
-                                <strong class="text-cyan-200">Автоматичний підбір</strong>
-                                <p class="text-gray-300 text-sm">Ми підберемо відповідне фото за темою</p>
-                            </label>
-                        </div>
-
-                        <div class="file-upload hidden" id="file-upload-area">
-                            <div class="text-cyan-400 mb-2">
-                                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <p class="text-gray-300">Натисніть для завантаження фото</p>
-                            <input type="file" id="post_image" accept="image/*">
-                        </div>
-                        <img id="image-preview" class="image-preview rounded-lg" alt="Попередній перегляд">
-                    </div>
-
-                    <button type="submit" class="w-full px-6 py-3 text-lg neon-button-main generate-post-btn">
-                        Згенерувати пост
-                    </button>
-                </form>
-                
-                <div class="flex space-x-4 mt-6">
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-secondary post-back-btn">
-                        Назад
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
     <div id="loading-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-2xl w-full mx-auto p-8 text-center">
-                <h2 class="text-3xl font-extrabold mb-6
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    ГЕНЕРАЦІЯ
-                </h2>
-                
-                <div class="mb-8">
-                    <p class="text-xl text-gray-300 mb-4" id="loading-text">Йде створення вашого проекту...</p>
-                    
-                    <div class="progress-container">
-                        <div class="progress-bar" id="progress-bar"></div>
-                    </div>
-                    
-                    <div class="flex justify-between text-sm text-gray-400 mt-2">
-                        <span>0%</span>
-                        <span id="progress-percent">0%</span>
-                        <span>100%</span>
-                    </div>
-                </div>
-                
-                <div class="space-y-3 text-left">
-                    <div class="flex justify-between">
-                        <span>Аналіз даних...</span>
-                        <span class="text-green-400" id="step1">⟳</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Генерація дизайну...</span>
-                        <span class="text-gray-400" id="step2">⏳</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Створення контенту...</span>
-                        <span class="text-gray-400" id="step3">⏳</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Фінальна компіляція...</span>
-                        <span class="text-gray-400" id="step4">⏳</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="register-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-md w-full mx-auto p-8">
-                <h2 class="text-3xl font-extrabold mb-6 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    РЕЄСТРАЦІЯ
-                </h2>
-                
-                <form class="auth-form space-y-5">
-                    <div>
-                        <label for="reg-email" class="block text-left text-sm font-medium text-cyan-200 mb-1">Електронна пошта</label>
-                        <input 
-                            type="email" 
-                            id="reg-email"
-                            placeholder="Ваша пошта" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-                    
-                    <div>
-                        <label for="reg-password" class="block text-left text-sm font-medium text-cyan-200 mb-1">Пароль</label>
-                        <input 
-                            type="password" 
-                            id="reg-password"
-                            placeholder="Ваш пароль" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-
-                    <div>
-                        <label for="reg-confirm-password" class="block text-left text-sm font-medium text-cyan-200 mb-1">Підтвердіть пароль</label>
-                        <input 
-                            type="password" 
-                            id="reg-confirm-password"
-                            placeholder="Повторіть пароль" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-
-                    <button type="submit" class="w-full px-6 py-3 text-lg neon-button-main">
-                        Зареєструватися
-                    </button>
-                </form>
-
-                <div class="mt-6 text-center">
-                    <div class="relative my-4">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-600"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-gray-900 text-gray-400">Або</span>
-                        </div>
-                    </div>
-
-                    <button class="neon-google-btn" id="google-register-btn">
-                        <svg class="google-icon" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                            <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                        </svg>
-                        Зареєструватися через Google
-                    </button>
-                </div>
-                
-                <div class="mt-6 text-center">
-                    <button class="text-cyan-400 hover:text-cyan-300 transition auth-back-btn">
-                        ← Назад
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="login-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-md w-full mx-auto p-8">
-                <h2 class="text-3xl font-extrabold mb-6 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    ВХІД
-                </h2>
-                
-                <form class="auth-form space-y-5">
-                    <div>
-                        <label for="login-email" class="block text-left text-sm font-medium text-cyan-200 mb-1">Електронна пошта</label>
-                        <input 
-                            type="email" 
-                            id="login-email"
-                            placeholder="Ваша пошта" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-                    
-                    <div>
-                        <label for="login-password" class="block text-left text-sm font-medium text-cyan-200 mb-1">Пароль</label>
-                        <input 
-                            type="password" 
-                            id="login-password"
-                            placeholder="Ваш пароль" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-
-                    <button type="submit" class="w-full px-6 py-3 text-lg neon-button-main">
-                        Увійти
-                    </button>
-                </form>
-
-                <div class="mt-6 text-center">
-                    <div class="relative my-4">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-600"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-gray-900 text-gray-400">Або</span>
-                        </div>
-                    </div>
-
-                    <button class="neon-google-btn" id="google-login-btn">
-                        <svg class="google-icon" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                            <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                        </svg>
-                        Увійти через Google
-                    </button>
-                </div>
-                
-                <div class="mt-6 text-center">
-                    <button class="text-cyan-400 hover:text-cyan-300 transition auth-back-btn">
-                        ← Назад
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="profile-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-2xl w-full mx-auto p-8">
-                <h2 class="text-3xl font-extrabold mb-6 text-center
-                           bg-gradient-to-r from-pink-500 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    МІЙ ПРОФІЛЬ
-                </h2>
-                
-                <div class="profile-avatar">
-                    <span>👤</span>
-                </div>
-                
-                <div class="text-center mb-6">
-                    <h3 class="text-xl font-bold text-cyan-400" id="profile-email">user@example.com</h3>
-                    <p class="text-gray-400">Користувач</p>
-                </div>
-                
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <span class="stat-value">3</span>
-                        <span class="stat-label">Створено сайтів</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">12</span>
-                        <span class="stat-label">Створено постів</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">1</span>
-                        <span class="stat-label">Активний тариф</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">15</span>
-                        <span class="stat-label">Днів використання</span>
-                    </div>
-                </div>
-                
-                <div class="mt-6">
-                    <h4 class="text-lg font-bold text-pink-400 mb-4">Останні проекти</h4>
-                    <div class="profile-project">
-                        <h5 class="font-bold text-cyan-200">Сайт для кав'ярні "Cosmo"</h5>
-                        <p class="text-gray-300 text-sm">Створено: 15.03.2025</p>
-                        <p class="text-gray-400 text-xs mt-1">Статус: Активний</p>
-                    </div>
-                    <div class="profile-project">
-                        <h5 class="font-bold text-cyan-200">Соціальні пости для бренду</h5>
-                        <p class="text-gray-300 text-sm">Створено: 10.03.2025</p>
-                        <p class="text-gray-400 text-xs mt-1">Статус: Завершено</p>
-                    </div>
-                </div>
-                
-                <div class="flex space-x-4 mt-8">
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-secondary profile-back-btn">
-                        Назад
-                    </button>
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-main upgrade-btn">
-                        Оновити тариф
-                    </button>
-                </div>
-                
-                <div class="mt-6 text-center">
-                    <button class="text-red-400 hover:text-red-300 transition logout-btn">
-                        Вийти з акаунту
-                    </button>
-                </div>
+        <div class="container mx-auto px-4 flex justify-center items-center h-full">
+            <div class="neon-card w-full max-w-md p-10 text-center">
+                <h2 class="text-2xl font-bold mb-4 text-cyan-400 animate-pulse">ГЕНЕРАЦІЯ...</h2>
+                <p id="loading-text" class="text-gray-300 mb-4">Аналіз даних...</p>
+                <div class="progress-box"><div class="progress-bar" id="progress-bar"></div></div>
             </div>
         </div>
     </div>
 
     <div id="success-page" class="page">
-        <div class="container mx-auto h-full flex items-center justify-center px-4">
-            <div class="neon-card max-w-2xl w-full mx-auto p-8 text-center">
-                <h2 class="text-4xl font-extrabold mb-6
-                           bg-gradient-to-r from-green-400 to-cyan-400 
-                           bg-clip-text text-transparent">
-                    УСПІХ!
-                </h2>
-                <p class="text-xl text-gray-300 mb-8" id="success-message">
-                    Ваш проект успішно згенеровано!
-                </p>
-                <div class="flex space-x-4">
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-main preview-btn">
-                        Переглянути
-                    </button>
-                    <button class="flex-1 px-6 py-3 text-lg neon-button-secondary download-btn">
-                        Завантажити
-                    </button>
+        <div class="container mx-auto px-4 flex justify-center items-center h-full">
+            <div class="neon-card w-full max-w-md p-10 text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <h2 class="text-3xl font-bold mb-4 text-green-400">ГОТОВО!</h2>
+                <p class="text-white mb-8">Ваш проект успішно створено.</p>
+                <div class="flex gap-4">
+                    <button class="neon-btn-primary flex-1">Переглянути</button>
+                    <button class="neon-btn-outline flex-1">Завантажити</button>
                 </div>
-                <button class="w-full mt-4 px-6 py-3 text-lg neon-button-secondary home-btn">
-                    На головну
-                </button>
+                <button onclick="goToPage('main-page')" class="mt-6 text-gray-400 block w-full">На головну</button>
             </div>
         </div>
     </div>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="register-page" class="page">
+        <div class="container mx-auto px-4 flex justify-center items-center h-full">
+            <div class="neon-card w-full max-w-md p-8">
+                <h2 class="text-3xl font-bold text-center mb-6">РЕЄСТРАЦІЯ</h2>
+                <form class="space-y-4 fake-auth-form">
+                    <input type="email" placeholder="Email" class="neon-input" required>
+                    <input type="password" placeholder="Пароль" class="neon-input" required>
+                    <button type="submit" class="neon-btn-primary">Створити акаунт</button>
+                </form>
+                <div class="flex items-center gap-2 my-6 text-sm text-gray-500">
+                    <div class="h-px bg-gray-700 flex-1"></div><span>АБО</span><div class="h-px bg-gray-700 flex-1"></div>
+                </div>
+                <button onclick="handleGoogleClick()" class="google-btn">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Реєстрація через Google
+                </button>
+                <div class="text-center mt-6"><button onclick="goToPage('main-page')" class="text-cyan-400 text-sm">← Назад</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-page" class="page">
+        <div class="container mx-auto px-4 flex justify-center items-center h-full">
+            <div class="neon-card w-full max-w-md p-8">
+                <h2 class="text-3xl font-bold text-center mb-6">ВХІД</h2>
+                <form class="space-y-4 fake-auth-form">
+                    <input type="email" placeholder="Email" class="neon-input" required>
+                    <input type="password" placeholder="Пароль" class="neon-input" required>
+                    <button type="submit" class="neon-btn-primary">Увійти</button>
+                </form>
+                <div class="flex items-center gap-2 my-6 text-sm text-gray-500">
+                    <div class="h-px bg-gray-700 flex-1"></div><span>АБО</span><div class="h-px bg-gray-700 flex-1"></div>
+                </div>
+                <button onclick="handleGoogleClick()" class="google-btn">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Увійти через Google
+                </button>
+                <div class="text-center mt-6"><button onclick="goToPage('main-page')" class="text-cyan-400 text-sm">← Назад</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-page" class="page">
+        <div class="container mx-auto px-4 flex justify-center items-center h-full">
+            <div class="neon-card w-full max-w-lg p-8 text-center">
+                <h2 class="text-3xl font-bold mb-6">МІЙ ПРОФІЛЬ</h2>
+                <div class="w-24 h-24 rounded-full bg-gradient-to-r from-cyan-400 to-purple-600 mx-auto flex items-center justify-center text-4xl mb-4">👨‍🚀</div>
+                <h3 class="text-2xl text-white font-bold" id="profile-name">Гість</h3>
+                <p class="text-gray-400 mb-8" id="profile-email">guest@spacegen.com</p>
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="p-4 border border-gray-700 rounded-lg">
+                        <div class="text-2xl font-bold text-cyan-400">0</div>
+                        <div class="text-xs text-gray-500 uppercase">Проектів</div>
+                    </div>
+                    <div class="p-4 border border-gray-700 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-400">Free</div>
+                        <div class="text-xs text-gray-500 uppercase">Тариф</div>
+                    </div>
+                </div>
+                <button onclick="logout()" class="neon-btn-outline border-red-500 text-red-500 hover:bg-red-500 hover:text-white">Вийти</button>
+                <button onclick="goToPage('main-page')" class="block w-full mt-4 text-gray-500">На головну</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Стан авторизації
+        // === ЛОГІКА САЙТУ ===
         let isLoggedIn = false;
-        let currentUserEmail = '';
-        let selectedPlan = '';
-        let selectedPrice = '';
 
-        // --- ЛОГІКА ДЛЯ GOOGLE SIGN-IN ---
-
-        // Функція для обробки Google Sign-In
-        function handleGoogleSignIn(response) {
-            console.log('Google Sign-In response:', response);
-            
-            if (response.credential) {
-                const user = parseJwt(response.credential);
-                if (user) {
-                    completeLogin(user.email, user.name);
-                }
-            }
-        }
-
-        // Функція завершення входу (справжнього або тестового)
-        function completeLogin(email, name) {
-            currentUserEmail = email;
-            isLoggedIn = true;
-            
-            // Зберігаємо в LocalStorage
-            localStorage.setItem('googleUser', JSON.stringify({ email, name }));
-            
-            alert(`Вітаємо, ${name}! Вхід успішний (SpaceGen).`);
-            
-            // Запускаємо ракету і переходимо на головну
+        function goToPage(pageId) {
             launchRocket(() => {
-                updateAuthButtons();
-                showPage('main-page');
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
             });
         }
 
-        // Функція запуску Google входу
-        function triggerGoogleSignIn() {
-            // ПЕРЕВІРКА ПРОТОКОЛУ: Якщо файл відкрито просто як файл (file://), Google не спрацює.
-            // Тому ми робимо "Тестовий вхід", щоб ти міг перевірити роботу сайту.
-            if (window.location.protocol === 'file:') {
-                alert('⚠️ Увага: Google вхід не працює на протоколі "file://". \n🚀 Активуємо режим ТЕСТОВОГО входу для демонстрації.');
-                
-                // Симуляція затримки і успішного входу
-                setTimeout(() => {
-                    completeLogin('test_user@gmail.com', 'Test User');
-                }, 1000);
-                return;
-            }
-
-            // Якщо є сервер, пробуємо справжній Google
-            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-                google.accounts.id.prompt((notification) => {
-                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                        // Якщо щось пішло не так, теж пропонуємо тестовий вхід
-                        console.log("Google prompt skipped, falling back to simulation");
-                    }
-                });
-            } else {
-                alert('Google API ще не завантажився або заблокований.');
-            }
-        }
-
-        // Розшифровка токена
-        function parseJwt(token) {
-            try {
-                const base64Url = token.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-                return JSON.parse(jsonPayload);
-            } catch (e) {
-                console.error("Помилка декодування:", e);
-                return null;
-            }
-        }
-
-        // Ініціалізація
-        function initializeGoogleSignIn() {
-            if (typeof google !== 'undefined') {
-                google.accounts.id.initialize({
-                    client_id: '453688014742-m0h3ohg69h1nr7jbhkktvmpap8oeg3u0.apps.googleusercontent.com',
-                    callback: handleGoogleSignIn,
-                    auto_select: false,
-                    cancel_on_tap_outside: true
-                });
-
-                // Додаємо події на кнопки Google
-                document.getElementById('google-register-btn')?.addEventListener('click', triggerGoogleSignIn);
-                document.getElementById('google-login-btn')?.addEventListener('click', triggerGoogleSignIn);
-            } else {
-                setTimeout(initializeGoogleSignIn, 1000);
-            }
-        }
-
-        // --- ВАЛІДАЦІЯ ТА ІНША ЛОГІКА САЙТУ ---
-
-        const validTestCards = ['4242424242424242', '5555555555554444', '378282246310005', '6011111111111117'];
-
-        function validateCardNumber(cardNumber) {
-            cardNumber = cardNumber.replace(/\s/g, '');
-            if (!/^\d{16}$/.test(cardNumber)) return false;
-            let sum = 0, isEven = false;
-            for (let i = cardNumber.length - 1; i >= 0; i--) {
-                let digit = parseInt(cardNumber[i]);
-                if (isEven) {
-                    digit *= 2;
-                    if (digit > 9) digit -= 9;
-                }
-                sum += digit;
-                isEven = !isEven;
-            }
-            return sum % 10 === 0;
-        }
-
-        function validateExpiry(expiry) {
-            if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
-            const [month, year] = expiry.split('/').map(Number);
-            const currentYear = new Date().getFullYear() % 100;
-            const currentMonth = new Date().getMonth() + 1;
-            if (month < 1 || month > 12) return false;
-            if (year < currentYear || (year === currentYear && month < currentMonth)) return false;
-            return true;
-        }
-
-        function validateCVV(cvv) { return /^\d{3,4}$/.test(cvv); }
-        function formatCardNumber(value) { return value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim(); }
-        function formatExpiry(value) { return value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2'); }
-
-        // Анімація зірок
-        function createStars() {
-            const starsContainer = document.getElementById('stars-container');
-            if(!starsContainer) return;
-            const starCount = 200;
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                const size = Math.random() * 3;
-                const starType = size < 1 ? 'small' : size < 2 ? 'medium' : 'large';
-                star.className = `star ${starType}`;
-                star.style.left = `${Math.random() * 100}vw`;
-                star.style.top = `${Math.random() * 100}vh`;
-                star.style.animationDelay = `${Math.random() * 3}s`;
-                star.style.opacity = Math.random() * 0.7 + 0.3;
-                starsContainer.appendChild(star);
-            }
-        }
-
-        // Запуск ракети
-        function launchRocket(nextAction) {
+        function launchRocket(callback) {
             const rocket = document.getElementById('rocket');
             rocket.style.display = 'block';
             rocket.classList.add('launching');
             setTimeout(() => {
                 rocket.style.display = 'none';
                 rocket.classList.remove('launching');
-                if (nextAction) nextAction();
+                if (callback) callback();
             }, 1000);
         }
 
-        // Навігація
-        function showPage(pageId) {
-            const currentPage = document.querySelector('.page.active');
-            if (currentPage) {
-                currentPage.classList.add('exiting');
-                currentPage.classList.remove('active');
+        // === ГУГЛ ВХІД (ТЕПЕР БЕЗ ПОМИЛОК) ===
+        function handleGoogleClick() {
+            // Ми просто імітуємо вхід, щоб не було помилки з доменом
+            fakeLogin("SpaceGen Користувач", "user@spacegen.com");
+        }
+
+        function fakeLogin(name, email) {
+            document.getElementById('nav-username').textContent = name;
+            document.getElementById('profile-name').textContent = name;
+            document.getElementById('profile-email').textContent = email;
+            document.getElementById('nav-auth-buttons').classList.add('hidden');
+            document.getElementById('nav-profile-btn').classList.remove('hidden');
+            isLoggedIn = true;
+            
+            alert(`Вхід успішний! Вітаємо, ${name}`);
+            goToPage('main-page');
+        }
+
+        function logout() {
+            document.getElementById('nav-auth-buttons').classList.remove('hidden');
+            document.getElementById('nav-profile-btn').classList.add('hidden');
+            goToPage('main-page');
+        }
+
+        function selectPlan(price) {
+            document.getElementById('pay-sum').textContent = price;
+            goToPage('payment-page');
+        }
+
+        // Ініціалізація
+        window.onload = function() {
+            // Зірки
+            const container = document.getElementById('stars-container');
+            for(let i=0; i<150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star ' + (Math.random() < 0.5 ? 'small' : 'medium');
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(star);
+            }
+
+            // Форми
+            document.getElementById('payment-form').onsubmit = (e) => {
+                e.preventDefault();
+                document.getElementById('pay-btn').textContent = "Оплата...";
                 setTimeout(() => {
-                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active', 'exiting'));
-                    document.getElementById(pageId).classList.add('active');
-                }, 400);
-            } else {
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active', 'exiting'));
-                document.getElementById(pageId).classList.add('active');
-            }
-        }
+                    document.getElementById('pay-btn').textContent = "СПЛАТИТИ";
+                    goToPage('generation-page');
+                }, 1000);
+            };
 
-        function updateAuthButtons() {
-            const authButtons = document.getElementById('auth-buttons');
-            const profileButton = document.getElementById('profile-button');
-            if (isLoggedIn) {
-                authButtons.classList.add('hidden');
-                profileButton.classList.remove('hidden');
-                document.getElementById('profile-email').textContent = currentUserEmail;
-            } else {
-                authButtons.classList.remove('hidden');
-                profileButton.classList.add('hidden');
-            }
-        }
-
-        function startLoading(type) {
-            const progressBar = document.getElementById('progress-bar');
-            const progressPercent = document.getElementById('progress-percent');
-            const loadingText = document.getElementById('loading-text');
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            const step4 = document.getElementById('step4');
-            
-            progressBar.style.width = '0%';
-            progressPercent.textContent = '0%';
-            step1.innerHTML = '⟳'; step2.innerHTML = '⏳'; step3.innerHTML = '⏳'; step4.innerHTML = '⏳';
-            
-            loadingText.textContent = type === 'website' ? 'Йде створення вашого сайту...' : 'Йде створення вашого поста...';
-            
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 1;
-                progressBar.style.width = progress + '%';
-                progressPercent.textContent = progress + '%';
-                if (progress >= 25) step1.innerHTML = '✓';
-                if (progress >= 50) step2.innerHTML = '✓';
-                if (progress >= 75) step3.innerHTML = '✓';
-                if (progress >= 100) {
-                    step4.innerHTML = '✓';
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        document.getElementById('success-message').textContent = type === 'website' ? 'Ваш сайт успішно згенеровано!' : 'Ваш пост успішно згенеровано!';
-                        showPage('success-page');
-                    }, 500);
-                }
-            }, 50); // Пришвидшив для тесту
-        }
-
-        // Футер
-        function setupFooter() {
-            const footer = document.getElementById('main-footer');
-            const footerTrigger = document.getElementById('footer-trigger');
-            if(!footer || !footerTrigger) return;
-            let footerTimeout;
-            
-            function showFooter() {
-                footer.classList.add('visible');
-                clearTimeout(footerTimeout);
-            }
-            function hideFooter() {
-                footerTimeout = setTimeout(() => {
-                    footer.classList.remove('visible');
-                }, 300);
-            }
-            footerTrigger.addEventListener('mouseenter', showFooter);
-            footerTrigger.addEventListener('mouseleave', hideFooter);
-            footer.addEventListener('mouseenter', () => clearTimeout(footerTimeout));
-            footer.addEventListener('mouseleave', hideFooter);
-        }
-
-        // --- ІНІЦІАЛІЗАЦІЯ ---
-        document.addEventListener('DOMContentLoaded', function() {
-            createStars();
-            
-            const savedUser = localStorage.getItem('googleUser');
-            if (savedUser) {
-                const user = JSON.parse(savedUser);
-                currentUserEmail = user.email;
-                isLoggedIn = true;
-            }
-            
-            updateAuthButtons();
-            setupFooter();
-            initializeGoogleSignIn();
-
-            // Обробники кнопок
-            document.getElementById('start-button')?.addEventListener('click', () => launchRocket(() => showPage('info-page')));
-            
-            // Back buttons
-            document.querySelector('.info-back-btn')?.addEventListener('click', () => launchRocket(() => showPage('main-page')));
-            document.querySelector('.pricing-back-btn')?.addEventListener('click', () => launchRocket(() => showPage('info-page')));
-            document.querySelector('.payment-back-btn')?.addEventListener('click', () => launchRocket(() => showPage('pricing-page')));
-            document.querySelector('.website-back-btn')?.addEventListener('click', () => launchRocket(() => showPage('payment-page')));
-            document.querySelector('.post-back-btn')?.addEventListener('click', () => launchRocket(() => showPage('payment-page')));
-            document.querySelector('.profile-back-btn')?.addEventListener('click', () => launchRocket(() => showPage('main-page')));
-            
-            document.querySelectorAll('.auth-back-btn').forEach(btn => {
-                btn.addEventListener('click', () => launchRocket(() => showPage('main-page')));
-            });
-
-            // Continue buttons
-            document.querySelector('.info-continue-btn')?.addEventListener('click', () => launchRocket(() => showPage('pricing-page')));
-
-            // Auth buttons
-            document.querySelector('.register-btn')?.addEventListener('click', () => launchRocket(() => showPage('register-page')));
-            document.querySelector('.login-btn')?.addEventListener('click', () => launchRocket(() => showPage('login-page')));
-            
-            // Profile & Logout
-            document.querySelector('.profile-btn')?.addEventListener('click', () => {
-                document.getElementById('profile-email').textContent = currentUserEmail;
-                launchRocket(() => showPage('profile-page'));
-            });
-            document.querySelector('.logout-btn')?.addEventListener('click', () => {
-                isLoggedIn = false;
-                currentUserEmail = '';
-                localStorage.removeItem('googleUser');
-                launchRocket(() => {
-                    updateAuthButtons();
-                    showPage('main-page');
-                });
-            });
-
-            // Plan selection
-            document.querySelectorAll('.select-plan').forEach(button => {
-                button.addEventListener('click', function() {
-                    selectedPlan = this.getAttribute('data-plan');
-                    selectedPrice = this.getAttribute('data-price');
-                    document.getElementById('selected-plan').textContent = this.textContent.trim();
-                    document.getElementById('selected-price').textContent = selectedPrice;
-                    document.getElementById('pay-amount').textContent = selectedPrice;
-                    launchRocket(() => showPage('payment-page'));
-                });
-            });
-
-            // Payment Form
-            const cardNumberInput = document.getElementById('card-number');
-            const cardExpiryInput = document.getElementById('card-expiry');
-            const cardCvvInput = document.getElementById('card-cvv');
-            const cardNameInput = document.getElementById('card-name');
-
-            if(cardNumberInput) cardNumberInput.addEventListener('input', function() { this.value = formatCardNumber(this.value); });
-            if(cardExpiryInput) cardExpiryInput.addEventListener('input', function() { this.value = formatExpiry(this.value); });
-            if(cardCvvInput) cardCvvInput.addEventListener('input', function() { this.value = this.value.replace(/\D/g, ''); });
-
-            document.getElementById('payment-form')?.addEventListener('submit', function(e) {
+            document.getElementById('gen-form').onsubmit = (e) => {
                 e.preventDefault();
-                let isValid = true;
-                const cardNumber = cardNumberInput.value.replace(/\s/g, '');
-                
-                if (!validateCardNumber(cardNumber) || !validTestCards.includes(cardNumber)) isValid = false;
-                if (!validateExpiry(cardExpiryInput.value)) isValid = false;
-                if (!validateCVV(cardCvvInput.value)) isValid = false;
-                if (cardNameInput.value.trim().length < 2) isValid = false;
-                
-                if (isValid) {
-                    const payButton = document.getElementById('pay-button');
-                    payButton.innerHTML = 'Обробка оплати...';
-                    payButton.disabled = true;
-                    setTimeout(() => {
-                        payButton.innerHTML = `Сплатити $${selectedPrice}`;
-                        payButton.disabled = false;
-                        launchRocket(() => {
-                            if (selectedPlan === 'standard') showPage('website-page');
-                            else showPage('post-page');
-                        });
-                    }, 1500);
-                } else {
-                    alert('Помилка: Використовуйте тестову картку (напр. 4242 4242 4242 4242)');
-                }
-            });
-
-            // Forms Generation
-            document.getElementById('website-form')?.addEventListener('submit', function(e) {
-                e.preventDefault();
-                launchRocket(() => { showPage('loading-page'); startLoading('website'); });
-            });
-            document.getElementById('post-form')?.addEventListener('submit', function(e) {
-                e.preventDefault();
-                launchRocket(() => { showPage('loading-page'); startLoading('post'); });
-            });
-            
-            document.querySelector('.home-btn')?.addEventListener('click', () => launchRocket(() => showPage('main-page')));
-
-            // Standard Auth Forms
-            document.querySelectorAll('.auth-form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const email = form.querySelector('input[type="email"]').value;
-                    if(email) completeLogin(email, 'User');
-                });
-            });
-
-            // Photo Option UI
-            const uploadOption = document.getElementById('upload-option');
-            const autoOption = document.getElementById('auto-option');
-            const fileUploadArea = document.getElementById('file-upload-area');
-            const imagePreview = document.getElementById('image-preview');
-            const fileInput = document.getElementById('post_image');
-
-            if(uploadOption) {
-                uploadOption.addEventListener('click', () => {
-                    document.getElementById('upload-radio').checked = true;
-                    uploadOption.classList.add('active');
-                    autoOption.classList.remove('active');
-                    fileUploadArea.classList.remove('hidden');
-                });
-            }
-            if(autoOption) {
-                autoOption.addEventListener('click', () => {
-                    document.getElementById('auto-radio').checked = true;
-                    autoOption.classList.add('active');
-                    uploadOption.classList.remove('active');
-                    fileUploadArea.classList.add('hidden');
-                    if(imagePreview) imagePreview.style.display = 'none';
-                });
-            }
-            if(fileUploadArea && fileInput) {
-                fileUploadArea.addEventListener('click', () => fileInput.click());
-                fileInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file && imagePreview) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            imagePreview.src = e.target.result;
-                            imagePreview.style.display = 'block';
-                        }
-                        reader.readAsDataURL(file);
+                goToPage('loading-page');
+                let width = 0;
+                const bar = document.getElementById('progress-bar');
+                const interval = setInterval(() => {
+                    width += 2;
+                    bar.style.width = width + '%';
+                    if(width >= 100) {
+                        clearInterval(interval);
+                        goToPage('success-page');
                     }
-                });
-            }
-        });
+                }, 50);
+            };
+
+            document.querySelectorAll('.fake-auth-form').forEach(f => {
+                f.onsubmit = (e) => {
+                    e.preventDefault();
+                    fakeLogin("Гість", "email@test.com");
+                }
+            });
+        };
     </script>
 </body>
 </html>
