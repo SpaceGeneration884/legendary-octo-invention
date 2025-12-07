@@ -1725,6 +1725,7 @@
             };
             return analysis;
         }
+/* ПОЧАТОК ДРУГОЇ ЧАСТИНИ */
 
         function generateHomePage(companyName, companyActivity, companyWishes, wishes) {
             const designClass = wishes.darkDesign ? 'dark-theme' : wishes.lightDesign ? 'light-theme' : 'modern-theme';
@@ -2157,7 +2158,6 @@
     </style>
 </head>
 <body class="${designClass}">
-    <!-- Header -->
     <header class="header">
         <div class="nav-container">
             <a href="#" class="logo">${companyName}</a>
@@ -2172,7 +2172,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content fade-in-up">
             <h1>Ласкаво просимо до ${companyName}</h1>
@@ -2181,7 +2180,6 @@
         </div>
     </section>
 
-    <!-- Features Section -->
     <section class="features" id="about">
         <div class="container">
             <h2 class="section-title">Чому обирають нас</h2>
@@ -2206,7 +2204,6 @@
     </section>
 
     ${wishes.menu ? `
-    <!-- Menu Section -->
     <section class="menu-section" id="menu">
         <div class="container">
             <h2 class="section-title">Наше меню</h2>
@@ -2235,7 +2232,6 @@
     ` : ''}
 
     ${wishes.map ? `
-    <!-- Map Section -->
     <section class="map-section" id="location">
         <div class="container">
             <h2 class="section-title">Де нас знайти</h2>
@@ -2248,7 +2244,6 @@
     </section>
     ` : ''}
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -2326,7 +2321,7 @@
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
-    </script>
+    <\/script>
 </body>
 </html>
             `;
@@ -2555,7 +2550,7 @@
             let completeHTML = '';
             
             pages.forEach(page => {
-                completeHTML += `\n\n<!-- ===== ${page.type} ===== -->\n${page.content}\n`;
+                completeHTML += `\n\n\n${page.content}\n`;
             });
             
             return completeHTML;
@@ -2732,3 +2727,4 @@
     </script>
 </body>
 </html>
+/* КІНЕЦЬ ПЕРШОЇ ЧАСТИНИ - КОПІЮЙТЕ ДОСЮДИ */
