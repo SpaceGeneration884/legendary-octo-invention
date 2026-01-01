@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>spacegen - Створіть свій сайт</title>
+    <title>spacegen - Створіть свій пост</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -801,11 +801,16 @@
                 </h2>
                 <p id="intro-description" class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
                     Розкажіть нам про свою ідею, і <span class="font-bold text-cyan-400" style="text-shadow: 0 0 5px #00d4ff;">spacegen</span> автоматично згенерує
-                    унікальний сайт для вашого бізнесу.
+                    унікальний пост для вашого бізнесу.
                 </p>
-                <button id="start-button" class="w-full px-6 py-3 text-lg neon-button-main start-btn">
-                    Почати подорож
-                </button>
+                <div class="flex space-x-4">
+                    <button id="start-post-button" class="flex-1 px-6 py-3 text-lg neon-button-main start-post-btn">
+                        Створити пост
+                    </button>
+                    <button id="start-website-button" class="flex-1 px-6 py-3 text-lg neon-button-secondary start-website-btn">
+                        Створити сайт
+                    </button>
+                </div>
             </div>
         </main>
 
@@ -864,7 +869,7 @@
                     <div>
                         <h4 class="text-sm font-bold text-cyan-300 mb-3">Послуги</h4>
                         <ul class="space-y-2">
-                            <li><a href="#" class="footer-link">Створення сайтів</a></li>
+                            <li><a href="#" class="footer-link">Створення постів</a></li>
                             <li><a href="#" class="footer-link">Генерація контенту</a></li>
                             <li><a href="#" class="footer-link">Дизайн</a></li>
                             <li><a href="#" class="footer-link">SEO оптимізація</a></li>
@@ -1223,21 +1228,21 @@
                 
                 <form id="post-form" class="flex flex-col items-center w-full max-w-lg mx-auto space-y-5">
                     <div class="w-full">
-                        <label for="post_theme" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Тема поста</label>
-                        <input 
-                            type="text" 
-                            id="post_theme"
-                            placeholder="Наприклад, 'Акція на каву'" 
-                            class="w-full px-5 py-3 neon-input"
-                        >
-                    </div>
-                    
-                    <div class="w-full">
                         <label for="company_name_post" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Назва компанії</label>
                         <input 
                             type="text" 
                             id="company_name_post"
                             placeholder="Наприклад, 'Cosmo Coffee'" 
+                            class="w-full px-5 py-3 neon-input"
+                        >
+                    </div>
+                    
+                    <div class="w-full">
+                        <label for="post_theme" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Тема поста</label>
+                        <input 
+                            type="text" 
+                            id="post_theme"
+                            placeholder="Наприклад, 'Акція на каву -50%'" 
                             class="w-full px-5 py-3 neon-input"
                         >
                     </div>
@@ -1273,8 +1278,18 @@
                         <img id="image-preview" class="image-preview rounded-lg" alt="Попередній перегляд">
                     </div>
 
+                    <div class="w-full">
+                        <label for="post_content" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Додаткові побажання</label>
+                        <textarea 
+                            id="post_content"
+                            rows="3"
+                            placeholder="Наприклад, 'Хочу веселий та яскравий пост для Instagram'" 
+                            class="w-full px-5 py-3 neon-input"
+                        ></textarea>
+                    </div>
+
                     <button type="submit" class="w-full px-6 py-3 text-lg neon-button-main generate-post-btn">
-                        Згенерувати пост
+                        Згенерувати якісний пост
                     </button>
                 </form>
                 
@@ -1293,11 +1308,11 @@
                 <h2 class="text-3xl font-extrabold mb-6
                           bg-gradient-to-r from-pink-500 to-cyan-400 
                           bg-clip-text text-transparent">
-                    ГЕНЕРАЦІЯ
+                    ГЕНЕРАЦІЯ ПОСТА
                 </h2>
                 
                 <div class="mb-8">
-                    <p class="text-xl text-gray-300 mb-4" id="loading-text">Йде створення вашого проекту...</p>
+                    <p class="text-xl text-gray-300 mb-4" id="loading-text">Йде створення вашого поста...</p>
                     
                     <div class="progress-container">
                         <div class="progress-bar" id="progress-bar"></div>
@@ -1312,19 +1327,19 @@
                 
                 <div class="space-y-3 text-left">
                     <div class="flex justify-between">
-                        <span>Аналіз даних...</span>
+                        <span>Аналіз теми...</span>
                         <span class="text-green-400" id="step1">⟳</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Генерація дизайну...</span>
+                        <span>Генерація контенту...</span>
                         <span class="text-gray-400" id="step2">⏳</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Створення контенту...</span>
+                        <span>Підбір/обробка фото...</span>
                         <span class="text-gray-400" id="step3">⏳</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Фінальна компіляція...</span>
+                        <span>Дизайн та оформлення...</span>
                         <span class="text-gray-400" id="step4">⏳</span>
                     </div>
                 </div>
@@ -1550,14 +1565,14 @@
                     УСПІХ!
                 </h2>
                 <p class="text-xl text-gray-300 mb-8" id="success-message">
-                    Ваш проект успішно згенеровано!
+                    Ваш пост успішно згенеровано!
                 </p>
                 <div class="flex space-x-4">
                     <button class="flex-1 px-6 py-3 text-lg neon-button-main preview-btn">
-                        Переглянути
+                        Переглянути пост
                     </button>
                     <button class="flex-1 px-6 py-3 text-lg neon-button-secondary download-btn">
-                        Завантажити
+                        Завантажити пост
                     </button>
                 </div>
                 <button class="w-full mt-4 px-6 py-3 text-lg neon-button-secondary home-btn">
@@ -1568,7 +1583,6 @@
     </div>
 
     <script>
-        // Твій ID (вставлений)
         const GOOGLE_CLIENT_ID = '861378555170-st4r0ud73tqtnm3bhmc70i167fcs6b54.apps.googleusercontent.com'; 
 
         let isLoggedIn = false;
@@ -1576,6 +1590,7 @@
         let selectedPlan = '';
         let selectedPrice = '';
         let generatedWebsiteCode = '';
+        let generatedPostContent = '';
 
         function goToPage(pageId) {
             launchRocket(() => {
@@ -1595,17 +1610,11 @@
             }, 1000);
         }
 
-        // --- ЛОГІКА GOOGLE (БЕЗ ПОМИЛОК) ---
         function triggerGoogleSignIn() {
-            // Щоб уникнути помилок на GitHub, спочатку пробуємо реальний вхід
-            // Якщо він блокується (помилка), перехоплюємо і робимо фейковий вхід
-            
             try {
                 if (window.google && window.google.accounts) {
                     google.accounts.id.prompt((notification) => {
                         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-                            // Якщо вікно не відкрилось або було заблоковане - вмикаємо демо-режим
-                            console.log("Google prompt prevented, using demo mode.");
                             fakeLogin("SpaceGen Користувач", "user@gmail.com");
                         }
                     });
@@ -1613,13 +1622,11 @@
                     throw new Error("Google API not loaded");
                 }
             } catch (e) {
-                // Якщо будь-яка помилка - демо режим
                 fakeLogin("SpaceGen Користувач", "user@gmail.com");
             }
         }
 
         function handleCredentialResponse(response) {
-            // Це спрацює тільки якщо Google дозволить вхід
             try {
                 const responsePayload = parseJwt(response.credential);
                 fakeLogin(responsePayload.name, responsePayload.email);
@@ -1637,7 +1644,6 @@
             return JSON.parse(jsonPayload);
         };
 
-        // --- ЛОГІКА ВХОДУ (Оновлення інтерфейсу) ---
         function fakeLogin(name, email) {
             currentUserEmail = email;
             document.getElementById('profile-email').textContent = email;
@@ -1663,918 +1669,208 @@
             }
         }
 
-        // --- AI ГЕНЕРАЦІЯ САЙТУ ---
-        function generateWebsiteWithAI(companyName, companyActivity, companyWishes, pageCount) {
-            // Аналізуємо побажання користувача
-            const wishes = analyzeWishes(companyWishes);
+        function generatePostWithAI(companyName, postTheme, postContent, photoSource, uploadedPhoto = null) {
+            const date = new Date().toLocaleDateString('uk-UA');
             
-            // Генерація деталізованого сайту на основі вхідних даних
-            const pages = [];
-            
-            // Визначаємо, які сторінки потрібно згенерувати
-            const pageTypes = ['Головна'];
-            if (pageCount >= 2) pageTypes.push('Про нас');
-            if (pageCount >= 3) pageTypes.push('Послуги');
-            if (pageCount >= 4) pageTypes.push('Контакти');
-            if (pageCount >= 5) pageTypes.push('Галерея');
-            
-            // Генерація кожної сторінки
-            pageTypes.forEach((pageType, index) => {
-                let pageContent = '';
-                
-                switch(pageType) {
-                    case 'Головна':
-                        pageContent = generateHomePage(companyName, companyActivity, companyWishes, wishes);
-                        break;
-                    case 'Про нас':
-                        pageContent = generateAboutPage(companyName, companyActivity, wishes);
-                        break;
-                    case 'Послуги':
-                        pageContent = generateServicesPage(companyName, companyActivity, wishes);
-                        break;
-                    case 'Контакти':
-                        pageContent = generateContactPage(companyName, wishes);
-                        break;
-                    case 'Галерея':
-                        pageContent = generateGalleryPage(companyName, companyActivity, wishes);
-                        break;
-                }
-                
-                pages.push({
-                    type: pageType,
-                    content: pageContent,
-                    fileName: index === 0 ? 'index.html' : `${pageType.toLowerCase().replace(' ', '-')}.html`
-                });
-            });
-            
-            return generateCompleteWebsite(pages, companyName, wishes);
-        }
-
-        function analyzeWishes(wishes) {
-            const analysis = {
-                darkDesign: wishes.toLowerCase().includes('темний') || wishes.toLowerCase().includes('темный'),
-                lightDesign: wishes.toLowerCase().includes('світлий') || wishes.toLowerCase().includes('светлый'),
-                menu: wishes.toLowerCase().includes('меню'),
-                map: wishes.toLowerCase().includes('карт') || wishes.toLowerCase().includes('карта'),
-                gallery: wishes.toLowerCase().includes('галерея') || wishes.toLowerCase().includes('фото'),
-                contactForm: wishes.toLowerCase().includes('форма') || wishes.toLowerCase().includes('контакт'),
-                modern: wishes.toLowerCase().includes('сучасний') || wishes.toLowerCase().includes('современный'),
-                minimal: wishes.toLowerCase().includes('мінімалістичний') || wishes.toLowerCase().includes('минималистичный'),
-                colorful: wishes.toLowerCase().includes('кольоровий') || wishes.toLowerCase().includes('цветной'),
-                professional: wishes.toLowerCase().includes('професійний') || wishes.toLowerCase().includes('профессиональный')
-            };
-            return analysis;
-        }
-/* ПОЧАТОК ДРУГОЇ ЧАСТИНИ */
-
-        function generateHomePage(companyName, companyActivity, companyWishes, wishes) {
-            const designClass = wishes.darkDesign ? 'dark-theme' : wishes.lightDesign ? 'light-theme' : 'modern-theme';
-            const backgroundColor = wishes.darkDesign ? '#1a1a1a' : wishes.lightDesign ? '#ffffff' : '#f8f9fa';
-            const textColor = wishes.darkDesign ? '#ffffff' : '#333333';
-            const primaryColor = wishes.darkDesign ? '#00d4ff' : wishes.lightDesign ? '#007bff' : '#764ba2';
-            
-            return `
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${companyName} - Головна</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: ${textColor};
-            background-color: ${backgroundColor};
-            overflow-x: hidden;
-        }
-        
-        .${designClass} {
-            min-height: 100vh;
-        }
-        
-        /* Header Styles */
-        .header {
-            background: ${wishes.darkDesign ? 'rgba(26, 26, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)'};
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid ${wishes.darkDesign ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
-            transition: all 0.3s ease;
-        }
-        
-        .header.scrolled {
-            background: ${wishes.darkDesign ? 'rgba(10, 10, 10, 0.98)' : 'rgba(255, 255, 255, 0.98)'};
-            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: ${primaryColor};
-            text-decoration: none;
-        }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        .nav-menu a {
-            text-decoration: none;
-            color: ${textColor};
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-        
-        .nav-menu a:hover {
-            color: ${primaryColor};
-        }
-        
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: ${primaryColor};
-            transition: width 0.3s ease;
-        }
-        
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: ${wishes.darkDesign ? 
-                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 
-                wishes.lightDesign ?
-                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' :
-                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'};
-            color: white;
-            padding: 160px 0 100px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 1;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: ${primaryColor};
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            background: ${wishes.darkDesign ? '#00b8e6' : wishes.lightDesign ? '#0056b3' : '#5a3a8a'};
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 100px 0;
-            background: ${wishes.darkDesign ? '#2d2d2d' : '#f8f9fa'};
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: ${textColor};
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 50px;
-        }
-        
-        .feature-card {
-            background: ${wishes.darkDesign ? '#3a3a3a' : 'white'};
-            padding: 40px 30px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            border: 1px solid ${wishes.darkDesign ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'};
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: ${primaryColor};
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
-            color: white;
-        }
-        
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: ${textColor};
-        }
-        
-        .feature-card p {
-            color: ${wishes.darkDesign ? '#cccccc' : '#666666'};
-            line-height: 1.6;
-        }
-        
-        ${wishes.menu ? `
-        /* Menu Section */
-        .menu-section {
-            padding: 100px 0;
-            background: ${wishes.darkDesign ? '#1a1a1a' : 'white'};
-        }
-        
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        
-        .menu-item {
-            background: ${wishes.darkDesign ? '#2d2d2d' : '#f8f9fa'};
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .menu-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .menu-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        
-        .menu-item h4 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: ${textColor};
-        }
-        
-        .menu-item .price {
-            color: ${primaryColor};
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        ` : ''}
-        
-        ${wishes.map ? `
-        /* Map Section */
-        .map-section {
-            padding: 80px 0;
-            background: ${wishes.darkDesign ? '#2d2d2d' : '#f8f9fa'};
-        }
-        
-        .map-container {
-            height: 400px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            margin-top: 30px;
-        }
-        
-        .map-placeholder {
-            width: 100%;
-            height: 100%;
-            background: ${primaryColor};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-        ` : ''}
-        
-        /* Footer */
-        .footer {
-            background: ${wishes.darkDesign ? '#1a1a1a' : '#2d2d2d'};
-            color: white;
-            padding: 60px 0 30px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-section h3 {
-            color: ${primaryColor};
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: #cccccc;
-            line-height: 1.6;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: ${primaryColor};
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .social-links a:hover {
-            background: ${primaryColor};
-            transform: translateY(-3px);
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #888;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out;
-        }
-        
-        /* Additional styles based on wishes */
-        ${wishes.modern ? `
-        .modern-accent {
-            position: relative;
-        }
-        
-        .modern-accent::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            z-index: -1;
-            border-radius: 10px;
-        }
-        ` : ''}
-        
-        ${wishes.minimal ? `
-        .minimal-border {
-            border: 1px solid ${wishes.darkDesign ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'};
-        }
-        ` : ''}
-    </style>
-</head>
-<body class="${designClass}">
-    <header class="header">
-        <div class="nav-container">
-            <a href="#" class="logo">${companyName}</a>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="#home">Головна</a></li>
-                    <li><a href="#about">Про нас</a></li>
-                    <li><a href="#services">Послуги</a></li>
-                    <li><a href="#contact">Контакти</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <section class="hero" id="home">
-        <div class="hero-content fade-in-up">
-            <h1>Ласкаво просимо до ${companyName}</h1>
-            <p>${companyActivity}. ${companyWishes}</p>
-            <button class="cta-button">Дізнатися більше</button>
-        </div>
-    </section>
-
-    <section class="features" id="about">
-        <div class="container">
-            <h2 class="section-title">Чому обирають нас</h2>
-            <div class="features-grid">
-                <div class="feature-card fade-in-up">
-                    <div class="feature-icon">🚀</div>
-                    <h3>Інновації</h3>
-                    <p>Ми використовуємо найновіші технології для досягнення найкращих результатів</p>
-                </div>
-                <div class="feature-card fade-in-up">
-                    <div class="feature-icon">⭐</div>
-                    <h3>Якість</h3>
-                    <p>Наш пріоритет - висока якість обслуговування та результатів роботи</p>
-                </div>
-                <div class="feature-card fade-in-up">
-                    <div class="feature-icon">💡</div>
-                    <h3>Креативність</h3>
-                    <p>Творчий підхід до кожного проекту гарантує унікальність рішень</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    ${wishes.menu ? `
-    <section class="menu-section" id="menu">
-        <div class="container">
-            <h2 class="section-title">Наше меню</h2>
-            <div class="menu-grid">
-                <div class="menu-item">
-                    <div style="background: #ddd; height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 15px;">Зображення страви</div>
-                    <h4>Фірмова страва</h4>
-                    <p>Смачна та ароматна страва за унікальним рецептом</p>
-                    <div class="price">250 грн</div>
-                </div>
-                <div class="menu-item">
-                    <div style="background: #ddd; height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 15px;">Зображення страви</div>
-                    <h4>Сезонна пропозиція</h4>
-                    <p>Свіжі інгредієнти та неперевершений смак</p>
-                    <div class="price">180 грн</div>
-                </div>
-                <div class="menu-item">
-                    <div style="background: #ddd; height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 15px;">Зображення страви</div>
-                    <h4>Десерт дня</h4>
-                    <p>Ніжний та апетитний десерт для істинних гурманів</p>
-                    <div class="price">120 грн</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    ` : ''}
-
-    ${wishes.map ? `
-    <section class="map-section" id="location">
-        <div class="container">
-            <h2 class="section-title">Де нас знайти</h2>
-            <div class="map-container">
-                <div class="map-placeholder">
-                    🗺️ Карта розташування ${companyName}
-                </div>
-            </div>
-        </div>
-    </section>
-    ` : ''}
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>${companyName}</h3>
-                    <p>${companyActivity}. Ми прагнемо надавати найкращі послуги для наших клієнтів.</p>
-                    <div class="social-links">
-                        <a href="#"><span>FB</span></a>
-                        <a href="#"><span>IG</span></a>
-                        <a href="#"><span>TW</span></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h3>Контакти</h3>
-                    <p>📧 info@${companyName.toLowerCase().replace(/\s+/g, '')}.com</p>
-                    <p>📞 +380 12 345 6789</p>
-                    <p>📍 м. Київ, вул. Прикладна, 1</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Години роботи</h3>
-                    <p>Пн-Пт: 9:00 - 18:00</p>
-                    <p>Сб: 10:00 - 16:00</p>
-                    <p>Нд: Вихідний</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 ${companyName}. Всі права захищено.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
+            let photoDescription = '';
+            if (photoSource === 'upload' && uploadedPhoto) {
+                photoDescription = `<p><strong>Фото:</strong> Використано ваше завантажене зображення</p>`;
             } else {
-                header.classList.remove('scrolled');
+                photoDescription = `<p><strong>Фото:</strong> Автоматично підібрано згідно з темою "${postTheme}"</p>`;
             }
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in-up').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-    <\/script>
-</body>
-</html>
-            `;
-        }
-
-        function generateAboutPage(companyName, companyActivity, wishes) {
-            return `
+            
+            const hashtags = generateHashtags(companyName, postTheme);
+            
+            generatedPostContent = `
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Про нас - ${companyName}</title>
+    <title>${companyName} - ${postTheme}</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
-            background: ${wishes.darkDesign ? '#1a1a1a' : '#f4f4f4'};
-            color: ${wishes.darkDesign ? '#fff' : '#333'};
-        }
-        .about-section {
-            padding: 100px 0;
-            background: ${wishes.darkDesign ? '#2d2d2d' : 'white'};
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
-        }
-        .about-text h2 {
-            color: ${wishes.darkDesign ? '#00d4ff' : '#764ba2'};
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
-    <section class="about-section">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Про нашу компанію</h2>
-                    <p>${companyName} - це команда професіоналів, яка спеціалізується на ${companyActivity}.</p>
-                    <p>Ми прагнемо надавати найкращі послуги для наших клієнтів, використовуючи сучасні технології та інноваційні підходи.</p>
-                    <p>Наша місія - забезпечити високу якість та задоволення потреб кожного клієнта.</p>
-                </div>
-                <div>
-                    <div style="width: 100%; height: 300px; background: #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #666;">
-                        Зображення команди
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</body>
-</html>
-            `;
-        }
-
-        function generateServicesPage(companyName, companyActivity, wishes) {
-            return `
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Послуги - ${companyName}</title>
-    <style>
-        .services-section {
-            padding: 100px 0;
-            background: ${wishes.darkDesign ? 
-                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 
-                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'};
-            color: white;
-        }
-        .service-item {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            margin: 20px 0;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
-    </style>
-</head>
-<body>
-    <section class="services-section">
-        <div class="container">
-            <h2 style="text-align: center;">Наші послуги</h2>
-            <div class="service-item">
-                <h3>Основна послуга</h3>
-                <p>${companyActivity} - наша основна спеціалізація</p>
-            </div>
-            <div class="service-item">
-                <h3>Консультації</h3>
-                <p>Професійні консультації з питань ${companyActivity}</p>
-            </div>
-            <div class="service-item">
-                <h3>Підтримка</h3>
-                <p>Постійна підтримка та супровід</p>
-            </div>
-        </div>
-    </section>
-</body>
-</html>
-            `;
-        }
-
-        function generateContactPage(companyName, wishes) {
-            return `
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Контакти - ${companyName}</title>
-    <style>
-        .contact-section {
-            padding: 100px 0;
-            background: ${wishes.darkDesign ? '#1a1a1a' : 'white'};
-            color: ${wishes.darkDesign ? '#fff' : '#333'};
-        }
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: ${wishes.darkDesign ? '#2d2d2d' : 'white'};
-            color: ${wishes.darkDesign ? '#fff' : '#333'};
-        }
-    </style>
-</head>
-<body>
-    <section class="contact-section">
-        <div class="container">
-            <h2 style="text-align: center;">Зв'яжіться з нами</h2>
-            <div class="contact-form">
-                <div class="form-group">
-                    <input type="text" placeholder="Ваше ім'я">
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Ваш email">
-                </div>
-                <div class="form-group">
-                    <textarea rows="5" placeholder="Ваше повідомлення"></textarea>
-                </div>
-                <button style="background: ${wishes.darkDesign ? '#00d4ff' : '#764ba2'}; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer;">Надіслати</button>
-            </div>
-        </div>
-    </section>
-</body>
-</html>
-            `;
-        }
-
-        function generateGalleryPage(companyName, companyActivity, wishes) {
-            return `
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Галерея - ${companyName}</title>
-    <style>
-        .gallery-section {
-            padding: 100px 0;
-            background: ${wishes.darkDesign ? '#2d2d2d' : '#f4f4f4'};
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .gallery-item {
-            background: ${wishes.darkDesign ? '#3a3a3a' : 'white'};
             padding: 20px;
-            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .post-container {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .post-header {
+            background: linear-gradient(135deg, #00d4ff 0%, #0088ff 100%);
+            color: white;
+            padding: 20px;
             text-align: center;
         }
-        .gallery-item img {
+        
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .post-theme {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .post-content {
+            padding: 25px;
+        }
+        
+        .post-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .post-image {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 5px;
+            height: 300px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .hashtag {
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            color: #667eea;
+        }
+        
+        .post-footer {
+            border-top: 1px solid #eee;
+            padding: 15px 25px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
-    <section class="gallery-section">
-        <div class="container">
-            <h2 style="text-align: center; color: ${wishes.darkDesign ? '#fff' : '#333'};">Наша галерея</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <div style="width: 100%; height: 200px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 10px;">Фото 1</div>
-                    <p>Наші роботи</p>
-                </div>
-                <div class="gallery-item">
-                    <div style="width: 100%; height: 200px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 10px;">Фото 2</div>
-                    <p>Досягнення</p>
-                </div>
-                <div class="gallery-item">
-                    <div style="width: 100%; height: 200px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #666; margin-bottom: 10px;">Фото 3</div>
-                    <p>Команда</p>
-                </div>
+    <div class="post-container">
+        <div class="post-header">
+            <div class="company-name">${companyName}</div>
+            <div class="post-theme">${postTheme}</div>
+        </div>
+        
+        <div class="post-content">
+            <div class="post-image">
+                ${photoSource === 'upload' ? 'Ваше фото' : 'Автоматично підібране фото'}
+            </div>
+            
+            <div class="post-text">
+                <p>🎉 <strong>${postTheme}</strong> 🎉</p>
+                <p>${postContent || 'Ми з радістю ділимося з вами цією чудовою новиною! Слідкуйте за нашими оновленнями та не пропустіть найцікавіші пропозиції.'}</p>
+                <p>📅 ${date}</p>
+                ${photoDescription}
+            </div>
+            
+            <div class="hashtags">
+                ${hashtags.map(tag => `<span class="hashtag">${tag}</span>`).join('')}
             </div>
         </div>
-    </section>
+        
+        <div class="post-footer">
+            <p>Згенеровано за допомогою SpaceGen ✨</p>
+            <div class="social-icons">
+                <div class="icon">👍</div>
+                <div class="icon">💬</div>
+                <div class="icon">🔄</div>
+                <div class="icon">❤️</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
             `;
+            
+            return generatedPostContent;
         }
 
-        function generateCompleteWebsite(pages, companyName, wishes) {
-            let completeHTML = '';
+        function generateHashtags(companyName, theme) {
+            const baseName = companyName.replace(/[^a-zA-Zа-яА-Я0-9]/g, '').toLowerCase();
+            const themeWords = theme.toLowerCase().split(' ').slice(0, 3);
             
-            pages.forEach(page => {
-                completeHTML += `\n\n\n${page.content}\n`;
-            });
+            const hashtags = [
+                `#${baseName}`,
+                `#${themeWords.join('')}`,
+                '#промоакція',
+                '#соціальнімережі',
+                '#маркетинг',
+                '#реклама',
+                '#україна',
+                '#бізнес',
+                '#оновлення',
+                '#спецпропозиція'
+            ];
             
-            return completeHTML;
+            return hashtags.slice(0, 8);
         }
 
-        function downloadGeneratedWebsite() {
+        function downloadGeneratedPost() {
             const element = document.createElement('a');
-            const file = new Blob([generatedWebsiteCode], {type: 'text/html'});
+            const file = new Blob([generatedPostContent], {type: 'text/html'});
             element.href = URL.createObjectURL(file);
-            element.download = `${document.getElementById('company_name').value.replace(/\s+/g, '_')}_website.html`;
+            element.download = `post_${document.getElementById('company_name_post').value.replace(/\s+/g, '_')}.html`;
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
         }
 
-        function previewGeneratedWebsite() {
+        function previewGeneratedPost() {
             const newWindow = window.open();
-            newWindow.document.write(generatedWebsiteCode);
+            newWindow.document.write(generatedPostContent);
             newWindow.document.close();
         }
 
-        // --- ІНІЦІАЛІЗАЦІЯ ПРИ ЗАВАНТАЖЕННІ ---
         window.onload = function() {
-            // Зірки
             const container = document.getElementById('stars-container');
             for(let i=0; i<150; i++) {
                 const star = document.createElement('div');
@@ -2585,18 +1881,18 @@
                 container.appendChild(star);
             }
 
-            // Ініціалізація Google
             if (typeof google !== 'undefined') {
                 google.accounts.id.initialize({
                     client_id: GOOGLE_CLIENT_ID,
                     callback: handleCredentialResponse,
-                    auto_select: false, // Вимкнули автовибір, щоб не спамило помилками
+                    auto_select: false,
                     cancel_on_tap_outside: true
                 });
             }
 
-            // Навігація
-            document.getElementById('start-button')?.addEventListener('click', () => goToPage('info-page'));
+            document.getElementById('start-post-button').addEventListener('click', () => goToPage('post-page'));
+            document.getElementById('start-website-button').addEventListener('click', () => goToPage('info-page'));
+            
             document.querySelector('.info-back-btn')?.addEventListener('click', () => goToPage('main-page'));
             document.querySelector('.info-continue-btn')?.addEventListener('click', () => goToPage('pricing-page'));
             document.querySelector('.pricing-back-btn')?.addEventListener('click', () => goToPage('info-page'));
@@ -2605,6 +1901,8 @@
             document.querySelectorAll('.auth-back-btn').forEach(btn => btn.addEventListener('click', () => goToPage('main-page')));
             document.querySelector('.profile-btn')?.addEventListener('click', () => goToPage('profile-page'));
             document.querySelector('.profile-back-btn')?.addEventListener('click', () => goToPage('main-page'));
+            document.querySelector('.post-back-btn')?.addEventListener('click', () => goToPage('main-page'));
+            document.querySelector('.website-back-btn')?.addEventListener('click', () => goToPage('main-page'));
             
             document.querySelector('.logout-btn')?.addEventListener('click', () => {
                 isLoggedIn = false;
@@ -2612,7 +1910,6 @@
                 goToPage('main-page');
             });
 
-            // Вибір плану
             document.querySelectorAll('.select-plan').forEach(button => {
                 button.addEventListener('click', function() {
                     selectedPlan = this.getAttribute('data-plan');
@@ -2624,7 +1921,6 @@
                 });
             });
 
-            // Генерація сайту
             document.getElementById('website-form')?.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const companyName = document.getElementById('company_name').value;
@@ -2641,7 +1937,6 @@
                 startLoading('website', companyName, companyActivity, companyWishes, pageCount);
             });
 
-            // Інші форми
             document.getElementById('payment-form').onsubmit = (e) => {
                 e.preventDefault();
                 document.getElementById('pay-button').textContent = "Оплата...";
@@ -2653,8 +1948,18 @@
 
             document.getElementById('post-form')?.addEventListener('submit', function(e) {
                 e.preventDefault();
+                const companyName = document.getElementById('company_name_post').value;
+                const postTheme = document.getElementById('post_theme').value;
+                const postContent = document.getElementById('post_content').value;
+                const photoSource = document.querySelector('input[name="photo-source"]:checked').value;
+                
+                if (!companyName || !postTheme) {
+                    alert('Будь ласка, заповніть назву компанії та тему поста');
+                    return;
+                }
+                
                 goToPage('loading-page');
-                startLoading('post');
+                startLoading('post', companyName, postTheme, postContent, photoSource);
             });
 
             document.querySelectorAll('.auth-form').forEach(f => {
@@ -2664,13 +1969,57 @@
                 }
             });
 
-            // Кнопки успіху
-            document.querySelector('.preview-btn')?.addEventListener('click', previewGeneratedWebsite);
-            document.querySelector('.download-btn')?.addEventListener('click', downloadGeneratedWebsite);
+            document.querySelector('.preview-btn')?.addEventListener('click', () => {
+                if (generatedWebsiteCode) {
+                    const newWindow = window.open();
+                    newWindow.document.write(generatedWebsiteCode);
+                    newWindow.document.close();
+                } else if (generatedPostContent) {
+                    previewGeneratedPost();
+                }
+            });
+
+            document.querySelector('.download-btn')?.addEventListener('click', () => {
+                if (generatedWebsiteCode) {
+                    downloadGeneratedWebsite();
+                } else if (generatedPostContent) {
+                    downloadGeneratedPost();
+                }
+            });
+
             document.querySelector('.home-btn')?.addEventListener('click', () => goToPage('main-page'));
+
+            document.getElementById('upload-radio').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('file-upload-area').classList.remove('hidden');
+                    document.getElementById('upload-option').classList.add('active');
+                    document.getElementById('auto-option').classList.remove('active');
+                }
+            });
+
+            document.getElementById('auto-radio').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('file-upload-area').classList.add('hidden');
+                    document.getElementById('auto-option').classList.add('active');
+                    document.getElementById('upload-option').classList.remove('active');
+                }
+            });
+
+            document.getElementById('post_image').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('image-preview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
         };
 
-        function startLoading(type, companyName, companyActivity, companyWishes, pageCount) {
+        function startLoading(type, ...args) {
             const progressBar = document.getElementById('progress-bar');
             const progressPercent = document.getElementById('progress-percent');
             const loadingText = document.getElementById('loading-text');
@@ -2681,8 +2030,8 @@
             loadingText.textContent = type === 'website' ? 'Йде створення вашого сайту...' : 'Йде створення вашого поста...';
             
             let progress = 0;
-            const totalTime = 30000; // 30 секунд
-            const intervalTime = 100; // Оновлюємо кожні 100ms
+            const totalTime = 30000;
+            const intervalTime = 100;
             const increment = (intervalTime / totalTime) * 100;
             
             const interval = setInterval(() => {
@@ -2692,7 +2041,6 @@
                 progressBar.style.width = progress + '%';
                 progressPercent.textContent = Math.round(progress) + '%';
                 
-                // Оновлення статусів кроків
                 if (progress >= 20) {
                     document.getElementById('step1').textContent = '✓';
                     document.getElementById('step1').style.color = '#00ff00';
@@ -2714,17 +2062,77 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         if (type === 'website') {
-                            generatedWebsiteCode = generateWebsiteWithAI(companyName, companyActivity, companyWishes, pageCount);
-                            document.getElementById('success-message').textContent = `Ваш сайт "${companyName}" успішно згенеровано!`;
+                            generatedWebsiteCode = generateWebsiteWithAI(...args);
+                            document.getElementById('success-message').textContent = `Ваш сайт "${args[0]}" успішно згенеровано!`;
                         } else {
-                            document.getElementById('success-message').textContent = 'Ваш пост успішно згенеровано!';
+                            generatedPostContent = generatePostWithAI(...args);
+                            document.getElementById('success-message').textContent = `Пост для "${args[0]}" успішно згенеровано!`;
                         }
                         goToPage('success-page');
                     }, 500);
                 }
             }, intervalTime);
         }
+
+        function generateWebsiteWithAI(companyName, companyActivity, companyWishes, pageCount) {
+            return `
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${companyName}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #00d4ff;
+            text-align: center;
+            margin: 40px 0;
+        }
+        p {
+            line-height: 1.6;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>${companyName}</h1>
+        <p>${companyActivity}</p>
+        <p>${companyWishes}</p>
+        <p>Створено за допомогою SpaceGen</p>
+    </div>
+</body>
+</html>
+            `;
+        }
+
+        function downloadGeneratedWebsite() {
+            const element = document.createElement('a');
+            const file = new Blob([generatedWebsiteCode], {type: 'text/html'});
+            element.href = URL.createObjectURL(file);
+            element.download = `${document.getElementById('company_name').value.replace(/\s+/g, '_')}_website.html`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function previewGeneratedWebsite() {
+            const newWindow = window.open();
+            newWindow.document.write(generatedWebsiteCode);
+            newWindow.document.close();
+        }
     </script>
 </body>
 </html>
-
