@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>spacegen - Створіть свій пост</title>
+    <title>spacegen - Створіть свій сайт</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -801,16 +801,11 @@
                 </h2>
                 <p id="intro-description" class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
                     Розкажіть нам про свою ідею, і <span class="font-bold text-cyan-400" style="text-shadow: 0 0 5px #00d4ff;">spacegen</span> автоматично згенерує
-                    унікальний пост для вашого бізнесу.
+                    унікальний сайт для вашого бізнесу.
                 </p>
-                <div class="flex space-x-4">
-                    <button id="start-post-button" class="flex-1 px-6 py-3 text-lg neon-button-main start-post-btn">
-                        Створити пост
-                    </button>
-                    <button id="start-website-button" class="flex-1 px-6 py-3 text-lg neon-button-secondary start-website-btn">
-                        Створити сайт
-                    </button>
-                </div>
+                <button id="start-button" class="w-full px-6 py-3 text-lg neon-button-main start-btn">
+                    Почати подорож
+                </button>
             </div>
         </main>
 
@@ -869,7 +864,7 @@
                     <div>
                         <h4 class="text-sm font-bold text-cyan-300 mb-3">Послуги</h4>
                         <ul class="space-y-2">
-                            <li><a href="#" class="footer-link">Створення постів</a></li>
+                            <li><a href="#" class="footer-link">Створення сайтів</a></li>
                             <li><a href="#" class="footer-link">Генерація контенту</a></li>
                             <li><a href="#" class="footer-link">Дизайн</a></li>
                             <li><a href="#" class="footer-link">SEO оптимізація</a></li>
@@ -1003,7 +998,7 @@
                                 <span>Базові шаблони дизайну</span>
                             </li>
                         </ul>
-                        <button class="w-full px-6 py-3 text-lg neon-button-secondary select-plan" data-plan="basic" data-price="5">
+                        <button class="w-full px-6 py-3 text-lg neon-button-secondary select-plan" data-plan="basic" data-price="5" data-type="post">
                             Обрати план
                         </button>
                     </div>
@@ -1033,7 +1028,7 @@
                                 <span>Технічна підтримка 1 місяць</span>
                             </li>
                         </ul>
-                        <button class="w-full px-6 py-3 text-lg neon-button-main select-plan" data-plan="standard" data-price="19.9">
+                        <button class="w-full px-6 py-3 text-lg neon-button-main select-plan" data-plan="standard" data-price="19.9" data-type="website">
                             Обрати план
                         </button>
                     </div>
@@ -1060,7 +1055,7 @@
                                 <span>Пріоритетна підтримка</span>
                             </li>
                         </ul>
-                        <button class="w-full px-6 py-3 text-lg neon-button-secondary select-plan" data-plan="premium" data-price="24.99">
+                        <button class="w-full px-6 py-3 text-lg neon-button-secondary select-plan" data-plan="premium" data-price="24.99" data-type="post">
                             Обрати план
                         </button>
                     </div>
@@ -1227,6 +1222,7 @@
                 </h2>
                 
                 <form id="post-form" class="flex flex-col items-center w-full max-w-lg mx-auto space-y-5">
+                    <!-- ЗМІНА ПОРЯДКУ: спочатку назва компанії -->
                     <div class="w-full">
                         <label for="company_name_post" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Назва компанії</label>
                         <input 
@@ -1234,9 +1230,11 @@
                             id="company_name_post"
                             placeholder="Наприклад, 'Cosmo Coffee'" 
                             class="w-full px-5 py-3 neon-input"
+                            required
                         >
                     </div>
                     
+                    <!-- ЗМІНА: тема поста -->
                     <div class="w-full">
                         <label for="post_theme" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Тема поста</label>
                         <input 
@@ -1244,6 +1242,7 @@
                             id="post_theme"
                             placeholder="Наприклад, 'Акція на каву -50%'" 
                             class="w-full px-5 py-3 neon-input"
+                            required
                         >
                     </div>
 
@@ -1278,12 +1277,13 @@
                         <img id="image-preview" class="image-preview rounded-lg" alt="Попередній перегляд">
                     </div>
 
+                    <!-- Додаємо поле для детального опису -->
                     <div class="w-full">
-                        <label for="post_content" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Додаткові побажання</label>
+                        <label for="post_details" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Детальний опис поста (необов'язково)</label>
                         <textarea 
-                            id="post_content"
+                            id="post_details"
                             rows="3"
-                            placeholder="Наприклад, 'Хочу веселий та яскравий пост для Instagram'" 
+                            placeholder="Опишіть, який пост ви хочете: стиль, тональність, ключові моменти..." 
                             class="w-full px-5 py-3 neon-input"
                         ></textarea>
                     </div>
@@ -1308,11 +1308,11 @@
                 <h2 class="text-3xl font-extrabold mb-6
                           bg-gradient-to-r from-pink-500 to-cyan-400 
                           bg-clip-text text-transparent">
-                    ГЕНЕРАЦІЯ ПОСТА
+                    ГЕНЕРАЦІЯ
                 </h2>
                 
                 <div class="mb-8">
-                    <p class="text-xl text-gray-300 mb-4" id="loading-text">Йде створення вашого поста...</p>
+                    <p class="text-xl text-gray-300 mb-4" id="loading-text">Йде створення вашого проекту...</p>
                     
                     <div class="progress-container">
                         <div class="progress-bar" id="progress-bar"></div>
@@ -1327,19 +1327,19 @@
                 
                 <div class="space-y-3 text-left">
                     <div class="flex justify-between">
-                        <span>Аналіз теми...</span>
+                        <span>Аналіз даних...</span>
                         <span class="text-green-400" id="step1">⟳</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Генерація контенту...</span>
+                        <span>Генерація дизайну...</span>
                         <span class="text-gray-400" id="step2">⏳</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Підбір/обробка фото...</span>
+                        <span>Створення контенту...</span>
                         <span class="text-gray-400" id="step3">⏳</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Дизайн та оформлення...</span>
+                        <span>Фінальна компіляція...</span>
                         <span class="text-gray-400" id="step4">⏳</span>
                     </div>
                 </div>
@@ -1565,14 +1565,14 @@
                     УСПІХ!
                 </h2>
                 <p class="text-xl text-gray-300 mb-8" id="success-message">
-                    Ваш пост успішно згенеровано!
+                    Ваш проект успішно згенеровано!
                 </p>
                 <div class="flex space-x-4">
                     <button class="flex-1 px-6 py-3 text-lg neon-button-main preview-btn">
-                        Переглянути пост
+                        Переглянути
                     </button>
                     <button class="flex-1 px-6 py-3 text-lg neon-button-secondary download-btn">
-                        Завантажити пост
+                        Завантажити
                     </button>
                 </div>
                 <button class="w-full mt-4 px-6 py-3 text-lg neon-button-secondary home-btn">
@@ -1589,6 +1589,7 @@
         let currentUserEmail = '';
         let selectedPlan = '';
         let selectedPrice = '';
+        let selectedPlanType = ''; // 'post' або 'website'
         let generatedWebsiteCode = '';
         let generatedPostContent = '';
 
@@ -1669,19 +1670,32 @@
             }
         }
 
-        function generatePostWithAI(companyName, postTheme, postContent, photoSource, uploadedPhoto = null) {
-            const date = new Date().toLocaleDateString('uk-UA');
+        function generatePostWithAI(companyName, postTheme, postDetails, photoSource, uploadedImage = null) {
+            const date = new Date().toLocaleDateString('uk-UA', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
             
-            let photoDescription = '';
-            if (photoSource === 'upload' && uploadedPhoto) {
-                photoDescription = `<p><strong>Фото:</strong> Використано ваше завантажене зображення</p>`;
+            let photoSection = '';
+            if (photoSource === 'upload' && uploadedImage) {
+                photoSection = `
+                <div class="post-photo">
+                    <img src="${uploadedImage}" alt="${postTheme}" style="max-width:100%; border-radius:10px;">
+                    <p class="photo-caption">Ваше завантажене фото</p>
+                </div>`;
             } else {
-                photoDescription = `<p><strong>Фото:</strong> Автоматично підібрано згідно з темою "${postTheme}"</p>`;
+                photoSection = `
+                <div class="post-photo" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding:60px 20px; text-align:center; border-radius:10px;">
+                    <div style="font-size:48px; margin-bottom:20px;">📸</div>
+                    <h3 style="color:white;">Автоматично підібране фото</h3>
+                    <p style="color:rgba(255,255,255,0.8);">Тема: "${postTheme}"</p>
+                </div>`;
             }
-            
+
             const hashtags = generateHashtags(companyName, postTheme);
-            
-            generatedPostContent = `
+
+            return `
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -1689,11 +1703,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${companyName} - ${postTheme}</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1701,95 +1722,166 @@
         }
         
         .post-container {
+            max-width: 600px;
+            width: 100%;
             background: white;
             border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         
         .post-header {
             background: linear-gradient(135deg, #00d4ff 0%, #0088ff 100%);
             color: white;
-            padding: 20px;
+            padding: 30px 25px;
             text-align: center;
         }
         
         .company-name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
         
         .post-theme {
-            font-size: 18px;
-            opacity: 0.9;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-bottom: 15px;
+        }
+        
+        .post-date {
+            font-size: 14px;
+            opacity: 0.8;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
         }
         
         .post-content {
-            padding: 25px;
+            padding: 30px;
+        }
+        
+        .post-photo {
+            margin: 25px 0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .photo-caption {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            font-style: italic;
         }
         
         .post-text {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 20px;
+            font-size: 17px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 25px;
         }
         
-        .post-image {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .post-details {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid #00d4ff;
+        }
+        
+        .post-details h3 {
+            color: #0088ff;
+            margin-bottom: 10px;
             font-size: 18px;
-            margin-bottom: 20px;
         }
         
         .hashtags {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
         }
         
         .hashtag {
-            background: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 15px;
+            background: #eef7ff;
+            color: #0088ff;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 14px;
-            color: #667eea;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .hashtag:hover {
+            background: #0088ff;
+            color: white;
+            transform: translateY(-2px);
         }
         
         .post-footer {
-            border-top: 1px solid #eee;
-            padding: 15px 25px;
-            font-size: 14px;
-            color: #666;
+            padding: 25px 30px;
+            background: #f8f9fa;
             text-align: center;
+            border-top: 1px solid #eee;
         }
         
-        .social-icons {
+        .social-buttons {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 10px;
+            margin: 20px 0;
         }
         
-        .icon {
-            width: 40px;
-            height: 40px;
+        .social-btn {
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            background: #f0f0f0;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .like-btn { background: #4267B2; color: white; }
+        .comment-btn { background: #1DA1F2; color: white; }
+        .share-btn { background: #E1306C; color: white; }
+        .save-btn { background: #FFC107; color: white; }
+        
+        .social-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .generated-by {
+            color: #888;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 480px) {
+            .post-header {
+                padding: 20px 15px;
+            }
+            
+            .company-name {
+                font-size: 24px;
+            }
+            
+            .post-theme {
+                font-size: 18px;
+            }
+            
+            .post-content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -1798,18 +1890,22 @@
         <div class="post-header">
             <div class="company-name">${companyName}</div>
             <div class="post-theme">${postTheme}</div>
+            <div class="post-date">${date}</div>
         </div>
         
         <div class="post-content">
-            <div class="post-image">
-                ${photoSource === 'upload' ? 'Ваше фото' : 'Автоматично підібране фото'}
-            </div>
+            ${photoSection}
             
             <div class="post-text">
-                <p>🎉 <strong>${postTheme}</strong> 🎉</p>
-                <p>${postContent || 'Ми з радістю ділимося з вами цією чудовою новиною! Слідкуйте за нашими оновленнями та не пропустіть найцікавіші пропозиції.'}</p>
-                <p>📅 ${date}</p>
-                ${photoDescription}
+                <p>🎉 <strong>Спеціальна пропозиція!</strong> 🎉</p>
+                <p>${postDetails || `Ми раді поділитися з вами чудовою новиною! ${postTheme}. Не пропустіть унікальну можливість скористатися нашими послугами.`}</p>
+            </div>
+            
+            <div class="post-details">
+                <h3>📋 Деталі пропозиції:</h3>
+                <p>• Акція діє до кінця місяця</p>
+                <p>• Спеціальні умови для постійних клієнтів</p>
+                <p>• Безкоштовна консультація</p>
             </div>
             
             <div class="hashtags">
@@ -1818,56 +1914,42 @@
         </div>
         
         <div class="post-footer">
-            <p>Згенеровано за допомогою SpaceGen ✨</p>
-            <div class="social-icons">
-                <div class="icon">👍</div>
-                <div class="icon">💬</div>
-                <div class="icon">🔄</div>
-                <div class="icon">❤️</div>
+            <div class="social-buttons">
+                <div class="social-btn like-btn">👍</div>
+                <div class="social-btn comment-btn">💬</div>
+                <div class="social-btn share-btn">🔄</div>
+                <div class="social-btn save-btn">⭐</div>
             </div>
+            <p class="generated-by">Згенеровано за допомогою SpaceGen.ai ✨</p>
         </div>
     </div>
 </body>
-</html>
-            `;
-            
-            return generatedPostContent;
+</html>`;
         }
 
         function generateHashtags(companyName, theme) {
-            const baseName = companyName.replace(/[^a-zA-Zа-яА-Я0-9]/g, '').toLowerCase();
-            const themeWords = theme.toLowerCase().split(' ').slice(0, 3);
+            const companyTag = companyName.replace(/[^a-zA-Zа-яА-ЯїЇєЄіІґҐ0-9]/g, '').toLowerCase();
+            const themeWords = theme.toLowerCase().split(' ').filter(word => word.length > 2).slice(0, 3);
             
-            const hashtags = [
-                `#${baseName}`,
-                `#${themeWords.join('')}`,
-                '#промоакція',
-                '#соціальнімережі',
-                '#маркетинг',
-                '#реклама',
+            const baseHashtags = [
+                `#${companyTag}`,
+                `#${companyTag}Україна`,
                 '#україна',
                 '#бізнес',
-                '#оновлення',
-                '#спецпропозиція'
+                '#промо',
+                '#акція',
+                '#спецпропозиція',
+                '#соціальнімережі',
+                '#маркетинг'
             ];
             
-            return hashtags.slice(0, 8);
-        }
-
-        function downloadGeneratedPost() {
-            const element = document.createElement('a');
-            const file = new Blob([generatedPostContent], {type: 'text/html'});
-            element.href = URL.createObjectURL(file);
-            element.download = `post_${document.getElementById('company_name_post').value.replace(/\s+/g, '_')}.html`;
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
-
-        function previewGeneratedPost() {
-            const newWindow = window.open();
-            newWindow.document.write(generatedPostContent);
-            newWindow.document.close();
+            themeWords.forEach(word => {
+                if(word.length > 2) {
+                    baseHashtags.push(`#${word}`);
+                }
+            });
+            
+            return baseHashtags.slice(0, 10);
         }
 
         window.onload = function() {
@@ -1890,9 +1972,7 @@
                 });
             }
 
-            document.getElementById('start-post-button').addEventListener('click', () => goToPage('post-page'));
-            document.getElementById('start-website-button').addEventListener('click', () => goToPage('info-page'));
-            
+            document.getElementById('start-button')?.addEventListener('click', () => goToPage('info-page'));
             document.querySelector('.info-back-btn')?.addEventListener('click', () => goToPage('main-page'));
             document.querySelector('.info-continue-btn')?.addEventListener('click', () => goToPage('pricing-page'));
             document.querySelector('.pricing-back-btn')?.addEventListener('click', () => goToPage('info-page'));
@@ -1910,10 +1990,13 @@
                 goToPage('main-page');
             });
 
+            // Вибір плану з визначенням типу
             document.querySelectorAll('.select-plan').forEach(button => {
                 button.addEventListener('click', function() {
                     selectedPlan = this.getAttribute('data-plan');
                     selectedPrice = this.getAttribute('data-price');
+                    selectedPlanType = this.getAttribute('data-type'); // 'post' або 'website'
+                    
                     document.getElementById('selected-plan').textContent = selectedPlan;
                     document.getElementById('selected-price').textContent = selectedPrice;
                     document.getElementById('pay-amount').textContent = selectedPrice;
@@ -1921,6 +2004,7 @@
                 });
             });
 
+            // Генерація сайту
             document.getElementById('website-form')?.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const companyName = document.getElementById('company_name').value;
@@ -1934,24 +2018,36 @@
                 }
                 
                 goToPage('loading-page');
-                startLoading('website', companyName, companyActivity, companyWishes, pageCount);
+                startLoading('website', {companyName, companyActivity, companyWishes, pageCount});
             });
 
+            // ОПЛАТА - тепер перехід залежить від типу плану
             document.getElementById('payment-form').onsubmit = (e) => {
                 e.preventDefault();
                 document.getElementById('pay-button').textContent = "Оплата...";
                 setTimeout(() => {
                     document.getElementById('pay-button').textContent = "СПЛАТИТИ";
-                    goToPage('website-page');
+                    
+                    // Перевіряємо тип обраного плану
+                    if (selectedPlanType === 'post') {
+                        goToPage('post-page');
+                    } else if (selectedPlanType === 'website') {
+                        goToPage('website-page');
+                    } else {
+                        // За замовчуванням - на сторінку сайту
+                        goToPage('website-page');
+                    }
                 }, 1000);
             };
 
+            // Генерація поста
             document.getElementById('post-form')?.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const companyName = document.getElementById('company_name_post').value;
                 const postTheme = document.getElementById('post_theme').value;
-                const postContent = document.getElementById('post_content').value;
+                const postDetails = document.getElementById('post_details').value;
                 const photoSource = document.querySelector('input[name="photo-source"]:checked').value;
+                const imageFile = document.getElementById('post_image').files[0];
                 
                 if (!companyName || !postTheme) {
                     alert('Будь ласка, заповніть назву компанії та тему поста');
@@ -1959,7 +2055,29 @@
                 }
                 
                 goToPage('loading-page');
-                startLoading('post', companyName, postTheme, postContent, photoSource);
+                
+                // Якщо завантажено фото, читаємо його як Data URL
+                if (photoSource === 'upload' && imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        startLoading('post', {
+                            companyName,
+                            postTheme,
+                            postDetails,
+                            photoSource,
+                            uploadedImage: e.target.result
+                        });
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    startLoading('post', {
+                        companyName,
+                        postTheme,
+                        postDetails,
+                        photoSource,
+                        uploadedImage: null
+                    });
+                }
             });
 
             document.querySelectorAll('.auth-form').forEach(f => {
@@ -1969,17 +2087,16 @@
                 }
             });
 
-            document.querySelector('.preview-btn')?.addEventListener('click', () => {
+            // Кнопки успіху
+            document.querySelector('.preview-btn')?.addEventListener('click', function() {
                 if (generatedWebsiteCode) {
-                    const newWindow = window.open();
-                    newWindow.document.write(generatedWebsiteCode);
-                    newWindow.document.close();
+                    previewGeneratedWebsite();
                 } else if (generatedPostContent) {
                     previewGeneratedPost();
                 }
             });
 
-            document.querySelector('.download-btn')?.addEventListener('click', () => {
+            document.querySelector('.download-btn')?.addEventListener('click', function() {
                 if (generatedWebsiteCode) {
                     downloadGeneratedWebsite();
                 } else if (generatedPostContent) {
@@ -1989,6 +2106,7 @@
 
             document.querySelector('.home-btn')?.addEventListener('click', () => goToPage('main-page'));
 
+            // Логіка для вибору фото
             document.getElementById('upload-radio').addEventListener('change', function() {
                 if (this.checked) {
                     document.getElementById('file-upload-area').classList.remove('hidden');
@@ -2002,6 +2120,7 @@
                     document.getElementById('file-upload-area').classList.add('hidden');
                     document.getElementById('auto-option').classList.add('active');
                     document.getElementById('upload-option').classList.remove('active');
+                    document.getElementById('image-preview').style.display = 'none';
                 }
             });
 
@@ -2019,7 +2138,7 @@
             });
         };
 
-        function startLoading(type, ...args) {
+        function startLoading(type, data) {
             const progressBar = document.getElementById('progress-bar');
             const progressPercent = document.getElementById('progress-percent');
             const loadingText = document.getElementById('loading-text');
@@ -2027,7 +2146,9 @@
             progressBar.style.width = '0%';
             progressPercent.textContent = '0%';
             
-            loadingText.textContent = type === 'website' ? 'Йде створення вашого сайту...' : 'Йде створення вашого поста...';
+            loadingText.textContent = type === 'website' 
+                ? 'Йде створення вашого сайту...' 
+                : 'Йде створення вашого поста...';
             
             let progress = 0;
             const totalTime = 30000;
@@ -2062,11 +2183,24 @@
                     clearInterval(interval);
                     setTimeout(() => {
                         if (type === 'website') {
-                            generatedWebsiteCode = generateWebsiteWithAI(...args);
-                            document.getElementById('success-message').textContent = `Ваш сайт "${args[0]}" успішно згенеровано!`;
-                        } else {
-                            generatedPostContent = generatePostWithAI(...args);
-                            document.getElementById('success-message').textContent = `Пост для "${args[0]}" успішно згенеровано!`;
+                            generatedWebsiteCode = generateWebsiteWithAI(
+                                data.companyName, 
+                                data.companyActivity, 
+                                data.companyWishes, 
+                                data.pageCount
+                            );
+                            document.getElementById('success-message').textContent = 
+                                `Ваш сайт "${data.companyName}" успішно згенеровано!`;
+                        } else if (type === 'post') {
+                            generatedPostContent = generatePostWithAI(
+                                data.companyName,
+                                data.postTheme,
+                                data.postDetails,
+                                data.photoSource,
+                                data.uploadedImage
+                            );
+                            document.getElementById('success-message').textContent = 
+                                `Пост для "${data.companyName}" успішно згенеровано!`;
                         }
                         goToPage('success-page');
                     }, 500);
@@ -2074,36 +2208,106 @@
             }, intervalTime);
         }
 
+        // Функції для перегляду та завантаження
+        function previewGeneratedWebsite() {
+            const newWindow = window.open();
+            newWindow.document.write(generatedWebsiteCode);
+            newWindow.document.close();
+        }
+
+        function downloadGeneratedWebsite() {
+            const element = document.createElement('a');
+            const file = new Blob([generatedWebsiteCode], {type: 'text/html'});
+            element.href = URL.createObjectURL(file);
+            element.download = `${document.getElementById('company_name')?.value.replace(/\s+/g, '_') || 'website'}_site.html`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function previewGeneratedPost() {
+            const newWindow = window.open();
+            newWindow.document.write(generatedPostContent);
+            newWindow.document.close();
+        }
+
+        function downloadGeneratedPost() {
+            const element = document.createElement('a');
+            const file = new Blob([generatedPostContent], {type: 'text/html'});
+            element.href = URL.createObjectURL(file);
+            element.download = `post_${document.getElementById('company_name_post')?.value.replace(/\s+/g, '_') || 'post'}.html`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        // Функції генерації сайту (залишаємо без змін)
         function generateWebsiteWithAI(companyName, companyActivity, companyWishes, pageCount) {
-            return `
-<!DOCTYPE html>
+            const wishes = analyzeWishes(companyWishes);
+            const pages = [];
+            const pageTypes = ['Головна'];
+            if (pageCount >= 2) pageTypes.push('Про нас');
+            if (pageCount >= 3) pageTypes.push('Послуги');
+            if (pageCount >= 4) pageTypes.push('Контакти');
+            if (pageCount >= 5) pageTypes.push('Галерея');
+            
+            pageTypes.forEach((pageType, index) => {
+                let pageContent = '';
+                switch(pageType) {
+                    case 'Головна':
+                        pageContent = generateHomePage(companyName, companyActivity, companyWishes, wishes);
+                        break;
+                    case 'Про нас':
+                        pageContent = generateAboutPage(companyName, companyActivity, wishes);
+                        break;
+                    case 'Послуги':
+                        pageContent = generateServicesPage(companyName, companyActivity, wishes);
+                        break;
+                    case 'Контакти':
+                        pageContent = generateContactPage(companyName, wishes);
+                        break;
+                    case 'Галерея':
+                        pageContent = generateGalleryPage(companyName, companyActivity, wishes);
+                        break;
+                }
+                
+                pages.push({
+                    type: pageType,
+                    content: pageContent,
+                    fileName: index === 0 ? 'index.html' : `${pageType.toLowerCase().replace(' ', '-')}.html`
+                });
+            });
+            
+            return generateCompleteWebsite(pages, companyName, wishes);
+        }
+
+        function analyzeWishes(wishes) {
+            const analysis = {
+                darkDesign: wishes.toLowerCase().includes('темний') || wishes.toLowerCase().includes('темный'),
+                lightDesign: wishes.toLowerCase().includes('світлий') || wishes.toLowerCase().includes('светлый'),
+                menu: wishes.toLowerCase().includes('меню'),
+                map: wishes.toLowerCase().includes('карт') || wishes.toLowerCase().includes('карта'),
+                gallery: wishes.toLowerCase().includes('галерея') || wishes.toLowerCase().includes('фото'),
+                contactForm: wishes.toLowerCase().includes('форма') || wishes.toLowerCase().includes('контакт'),
+                modern: wishes.toLowerCase().includes('сучасний') || wishes.toLowerCase().includes('современный'),
+                minimal: wishes.toLowerCase().includes('мінімалістичний') || wishes.toLowerCase().includes('минималистичный'),
+                colorful: wishes.toLowerCase().includes('кольоровий') || wishes.toLowerCase().includes('цветной'),
+                professional: wishes.toLowerCase().includes('професійний') || wishes.toLowerCase().includes('профессиональный')
+            };
+            return analysis;
+        }
+
+        function generateHomePage(companyName, companyActivity, companyWishes, wishes) {
+            return `<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${companyName}</title>
+    <title>${companyName} - Головна</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #1a1a1a;
-            color: white;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #00d4ff;
-            text-align: center;
-            margin: 40px 0;
-        }
-        p {
-            line-height: 1.6;
-            font-size: 18px;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #1a1a1a; color: white; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #00d4ff; text-align: center; }
     </style>
 </head>
 <body>
@@ -2111,27 +2315,74 @@
         <h1>${companyName}</h1>
         <p>${companyActivity}</p>
         <p>${companyWishes}</p>
-        <p>Створено за допомогою SpaceGen</p>
     </div>
 </body>
-</html>
-            `;
+</html>`;
         }
 
-        function downloadGeneratedWebsite() {
-            const element = document.createElement('a');
-            const file = new Blob([generatedWebsiteCode], {type: 'text/html'});
-            element.href = URL.createObjectURL(file);
-            element.download = `${document.getElementById('company_name').value.replace(/\s+/g, '_')}_website.html`;
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
+        function generateAboutPage(companyName, companyActivity, wishes) {
+            return `<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Про нас - ${companyName}</title>
+</head>
+<body>
+    <h1>Про нас</h1>
+    <p>${companyName} - ${companyActivity}</p>
+</body>
+</html>`;
         }
 
-        function previewGeneratedWebsite() {
-            const newWindow = window.open();
-            newWindow.document.write(generatedWebsiteCode);
-            newWindow.document.close();
+        function generateServicesPage(companyName, companyActivity, wishes) {
+            return `<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Послуги - ${companyName}</title>
+</head>
+<body>
+    <h1>Наші послуги</h1>
+</body>
+</html>`;
+        }
+
+        function generateContactPage(companyName, wishes) {
+            return `<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакти - ${companyName}</title>
+</head>
+<body>
+    <h1>Контакти</h1>
+</body>
+</html>`;
+        }
+
+        function generateGalleryPage(companyName, companyActivity, wishes) {
+            return `<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея - ${companyName}</title>
+</head>
+<body>
+    <h1>Галерея</h1>
+</body>
+</html>`;
+        }
+
+        function generateCompleteWebsite(pages, companyName, wishes) {
+            let completeHTML = '';
+            pages.forEach(page => {
+                completeHTML += `\n\n\n${page.content}\n`;
+            });
+            return completeHTML;
         }
     </script>
 </body>
