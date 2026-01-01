@@ -1670,6 +1670,76 @@
             }
         }
 
+        // НОВА ФУНКЦІЯ: отримання налаштувань теми для фото
+        function getThemeSettings(theme) {
+            const lowerTheme = theme.toLowerCase();
+            
+            if (lowerTheme.includes('ялин') || lowerTheme.includes('новоріч') || lowerTheme.includes('різдво') || lowerTheme.includes('свят')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #1a5f23 0%, #0a3d14 100%)',
+                    emoji: '🎄',
+                    title: 'Новорічна ялинка',
+                    backgroundColor: '#1a5f23'
+                };
+            } else if (lowerTheme.includes('кава') || lowerTheme.includes('кав') || lowerTheme.includes('кофе')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #6f4e37 0%, #4a3223 100%)',
+                    emoji: '☕',
+                    title: 'Ароматна кава',
+                    backgroundColor: '#6f4e37'
+                };
+            } else if (lowerTheme.includes('море') || lowerTheme.includes('пляж') || lowerTheme.includes('океан') || lowerTheme.includes('відпочинок')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #0077be 0%, #00a0e9 100%)',
+                    emoji: '🌊',
+                    title: 'Морська свіжість',
+                    backgroundColor: '#0077be'
+                };
+            } else if (lowerTheme.includes('гір') || lowerTheme.includes('гори') || lowerTheme.includes('похід')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #3d7d4a 0%, #1a3c20 100%)',
+                    emoji: '⛰️',
+                    title: 'Гірські простори',
+                    backgroundColor: '#3d7d4a'
+                };
+            } else if (lowerTheme.includes('спорт') || lowerTheme.includes('тренування') || lowerTheme.includes('фітнес')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)',
+                    emoji: '🏃‍♂️',
+                    title: 'Спортивний дух',
+                    backgroundColor: '#ff6b6b'
+                };
+            } else if (lowerTheme.includes('квіт') || lowerTheme.includes('квіти') || lowerTheme.includes('букет')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #ff66b2 0%, #ff3385 100%)',
+                    emoji: '🌸',
+                    title: 'Квітуча краса',
+                    backgroundColor: '#ff66b2'
+                };
+            } else if (lowerTheme.includes('технологі') || lowerTheme.includes('гаджет') || lowerTheme.includes('айті')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #333333 0%, #666666 100%)',
+                    emoji: '💻',
+                    title: 'Технології майбутнього',
+                    backgroundColor: '#333333'
+                };
+            } else if (lowerTheme.includes('їжа') || lowerTheme.includes('ресторан') || lowerTheme.includes('їдальня')) {
+                return {
+                    gradient: 'linear-gradient(135deg, #ff9966 0%, #ff5e62 100%)',
+                    emoji: '🍽️',
+                    title: 'Смачний обід',
+                    backgroundColor: '#ff9966'
+                };
+            } else {
+                return {
+                    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    emoji: '📸',
+                    title: 'Автоматично підібране фото',
+                    backgroundColor: '#667eea'
+                };
+            }
+        }
+
         function generatePostWithAI(companyName, postTheme, postDetails, photoSource, uploadedImage = null) {
             const date = new Date().toLocaleDateString('uk-UA', {
                 day: 'numeric',
@@ -1685,15 +1755,28 @@
                     <p class="photo-caption">Ваше завантажене фото</p>
                 </div>`;
             } else {
+                // ВАЖЛИВА ЗМІНА: Тепер система сама шукає/створює фото відповідно до теми
+                const themeSettings = getThemeSettings(postTheme);
+                
                 photoSection = `
-                <div class="post-photo" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding:60px 20px; text-align:center; border-radius:10px;">
-                    <div style="font-size:48px; margin-bottom:20px;">📸</div>
-                    <h3 style="color:white;">Автоматично підібране фото</h3>
-                    <p style="color:rgba(255,255,255,0.8);">Тема: "${postTheme}"</p>
+                <div class="post-photo">
+                    <div style="background:${themeSettings.gradient}; padding:60px 20px; text-align:center; border-radius:10px;">
+                        <div style="font-size:48px; margin-bottom:20px;">${themeSettings.emoji}</div>
+                        <h3 style="color:white;">${themeSettings.title}</h3>
+                        <p style="color:rgba(255,255,255,0.8);">Тема: "${postTheme}"</p>
+                    </div>
+                    <p class="photo-caption">Автоматично підібране фото за темою: "${postTheme}"</p>
                 </div>`;
             }
 
             const hashtags = generateHashtags(companyName, postTheme);
+            
+            const postText = postDetails 
+                ? `<div class="post-text">${postDetails}</div>`
+                : `<div class="post-text">
+                        <p>🎉 <strong>Спеціальна пропозиція від ${companyName}!</strong> 🎉</p>
+                        <p>${postTheme}. Не пропустіть унікальну можливість скористатися нашими послугами. Заходьте до нас або телефонуйте для отримання деталей.</p>
+                   </div>`;
 
             return `
 <!DOCTYPE html>
@@ -1896,10 +1979,7 @@
         <div class="post-content">
             ${photoSection}
             
-            <div class="post-text">
-                <p>🎉 <strong>Спеціальна пропозиція!</strong> 🎉</p>
-                <p>${postDetails || `Ми раді поділитися з вами чудовою новиною! ${postTheme}. Не пропустіть унікальну можливість скористатися нашими послугами.`}</p>
-            </div>
+            ${postText}
             
             <div class="post-details">
                 <h3>📋 Деталі пропозиції:</h3>
