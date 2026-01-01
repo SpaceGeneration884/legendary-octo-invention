@@ -1222,9 +1222,10 @@
                 </h2>
                 
                 <form id="post-form" class="flex flex-col items-center w-full max-w-lg mx-auto space-y-5">
-                    <!-- ЗМІНА ПОРЯДКУ: спочатку назва компанії -->
                     <div class="w-full">
-                        <label for="company_name_post" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Назва компанії</label>
+                        <label for="company_name_post" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">
+                            Назва компанії/профілю
+                        </label>
                         <input 
                             type="text" 
                             id="company_name_post"
@@ -1234,9 +1235,10 @@
                         >
                     </div>
                     
-                    <!-- ЗМІНА: тема поста -->
                     <div class="w-full">
-                        <label for="post_theme" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Тема поста</label>
+                        <label for="post_theme" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">
+                            Тема поста
+                        </label>
                         <input 
                             type="text" 
                             id="post_theme"
@@ -1246,8 +1248,23 @@
                         >
                     </div>
 
+                    <!-- НОВЕ ПОЛЕ: Опис людини -->
                     <div class="w-full">
-                        <label class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Виберіть джерело фото</label>
+                        <label for="person_description" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">
+                            Опис людини/теми (необов'язково)
+                        </label>
+                        <textarea 
+                            id="person_description"
+                            rows="3"
+                            placeholder="Наприклад: 'Молода креативна дівчина, фотограф, любить подорожі та каву...'" 
+                            class="w-full px-5 py-3 neon-input"
+                        ></textarea>
+                    </div>
+
+                    <div class="w-full">
+                        <label class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">
+                            Виберіть джерело фото
+                        </label>
                         
                         <div class="photo-option" id="upload-option">
                             <input type="radio" name="photo-source" value="upload" id="upload-radio">
@@ -1277,13 +1294,14 @@
                         <img id="image-preview" class="image-preview rounded-lg" alt="Попередній перегляд">
                     </div>
 
-                    <!-- Додаємо поле для детального опису -->
                     <div class="w-full">
-                        <label for="post_details" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">Детальний опис поста (необов'язково)</label>
+                        <label for="post_details" class="block text-left text-sm font-medium text-cyan-200 mb-1" style="text-shadow: 0 0 3px #00d4ff;">
+                            Додаткові деталі (необов'язково)
+                        </label>
                         <textarea 
                             id="post_details"
                             rows="3"
-                            placeholder="Опишіть, який пост ви хочете: стиль, тональність, ключові моменти..." 
+                            placeholder="Додаткова інформація, яка має бути в пості..." 
                             class="w-full px-5 py-3 neon-input"
                         ></textarea>
                     </div>
@@ -1589,7 +1607,7 @@
         let currentUserEmail = '';
         let selectedPlan = '';
         let selectedPrice = '';
-        let selectedPlanType = ''; // 'post' або 'website'
+        let selectedPlanType = '';
         let generatedWebsiteCode = '';
         let generatedPostContent = '';
 
@@ -1636,14 +1654,14 @@
             }
         }
 
-        function parseJwt (token) {
+        function parseJwt(token) {
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
             return JSON.parse(jsonPayload);
-        };
+        }
 
         function fakeLogin(name, email) {
             currentUserEmail = email;
@@ -1670,113 +1688,66 @@
             }
         }
 
-        // НОВА ФУНКЦІЯ: отримання налаштувань теми для фото
-        function getThemeSettings(theme) {
-            const lowerTheme = theme.toLowerCase();
-            
-            if (lowerTheme.includes('ялин') || lowerTheme.includes('новоріч') || lowerTheme.includes('різдво') || lowerTheme.includes('свят')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #1a5f23 0%, #0a3d14 100%)',
-                    emoji: '🎄',
-                    title: 'Новорічна ялинка',
-                    backgroundColor: '#1a5f23'
-                };
-            } else if (lowerTheme.includes('кава') || lowerTheme.includes('кав') || lowerTheme.includes('кофе')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #6f4e37 0%, #4a3223 100%)',
-                    emoji: '☕',
-                    title: 'Ароматна кава',
-                    backgroundColor: '#6f4e37'
-                };
-            } else if (lowerTheme.includes('море') || lowerTheme.includes('пляж') || lowerTheme.includes('океан') || lowerTheme.includes('відпочинок')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #0077be 0%, #00a0e9 100%)',
-                    emoji: '🌊',
-                    title: 'Морська свіжість',
-                    backgroundColor: '#0077be'
-                };
-            } else if (lowerTheme.includes('гір') || lowerTheme.includes('гори') || lowerTheme.includes('похід')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #3d7d4a 0%, #1a3c20 100%)',
-                    emoji: '⛰️',
-                    title: 'Гірські простори',
-                    backgroundColor: '#3d7d4a'
-                };
-            } else if (lowerTheme.includes('спорт') || lowerTheme.includes('тренування') || lowerTheme.includes('фітнес')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)',
-                    emoji: '🏃‍♂️',
-                    title: 'Спортивний дух',
-                    backgroundColor: '#ff6b6b'
-                };
-            } else if (lowerTheme.includes('квіт') || lowerTheme.includes('квіти') || lowerTheme.includes('букет')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #ff66b2 0%, #ff3385 100%)',
-                    emoji: '🌸',
-                    title: 'Квітуча краса',
-                    backgroundColor: '#ff66b2'
-                };
-            } else if (lowerTheme.includes('технологі') || lowerTheme.includes('гаджет') || lowerTheme.includes('айті')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #333333 0%, #666666 100%)',
-                    emoji: '💻',
-                    title: 'Технології майбутнього',
-                    backgroundColor: '#333333'
-                };
-            } else if (lowerTheme.includes('їжа') || lowerTheme.includes('ресторан') || lowerTheme.includes('їдальня')) {
-                return {
-                    gradient: 'linear-gradient(135deg, #ff9966 0%, #ff5e62 100%)',
-                    emoji: '🍽️',
-                    title: 'Смачний обід',
-                    backgroundColor: '#ff9966'
-                };
-            } else {
-                return {
-                    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    emoji: '📸',
-                    title: 'Автоматично підібране фото',
-                    backgroundColor: '#667eea'
-                };
-            }
+        // Функція для пошуку фото на Unsplash
+        function searchUnsplashImage(query) {
+            const searchTerm = encodeURIComponent(query);
+            return `https://source.unsplash.com/featured/600x400/?${searchTerm}`;
         }
 
-        function generatePostWithAI(companyName, postTheme, postDetails, photoSource, uploadedImage = null) {
+        // Функція для креативного поста без опису
+        function generateCreativePost(companyName, theme) {
+            const templates = [
+                `✨ Нова можливість від ${companyName}! ${theme}`,
+                `🚀 Інноваційний підхід від ${companyName}. ${theme}`,
+                `💫 ${companyName} представляє: ${theme}`,
+                `🎨 Творчий підхід до ${theme}`,
+                `🌟 Ексклюзивна пропозиція: ${theme}`
+            ];
+            
+            return templates[Math.floor(Math.random() * templates.length)];
+        }
+
+        function generatePostWithAI(companyName, postTheme, personDescription, postDetails, photoSource, uploadedImage = null) {
             const date = new Date().toLocaleDateString('uk-UA', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric'
             });
             
+            // Генеруємо текст поста
+            let postText = '';
+            if (personDescription) {
+                postText = `🌟 Знайомтесь! ${personDescription}`;
+            } else {
+                postText = generateCreativePost(companyName, postTheme);
+            }
+            
+            // Додаємо деталі, якщо вони є
+            if (postDetails) {
+                postText += `\n\n${postDetails}`;
+            }
+
             let photoSection = '';
             if (photoSource === 'upload' && uploadedImage) {
                 photoSection = `
                 <div class="post-photo">
-                    <img src="${uploadedImage}" alt="${postTheme}" style="max-width:100%; border-radius:10px;">
+                    <img src="${uploadedImage}" alt="${postTheme}" style="width:100%; border-radius:10px;">
                     <p class="photo-caption">Ваше завантажене фото</p>
                 </div>`;
             } else {
-                // ВАЖЛИВА ЗМІНА: Тепер система сама шукає/створює фото відповідно до теми
-                const themeSettings = getThemeSettings(postTheme);
+                // Автоматичний підбір фото з Unsplash
+                const searchQuery = postTheme || companyName || 'creative';
+                const unsplashUrl = searchUnsplashImage(searchQuery);
                 
                 photoSection = `
                 <div class="post-photo">
-                    <div style="background:${themeSettings.gradient}; padding:60px 20px; text-align:center; border-radius:10px;">
-                        <div style="font-size:48px; margin-bottom:20px;">${themeSettings.emoji}</div>
-                        <h3 style="color:white;">${themeSettings.title}</h3>
-                        <p style="color:rgba(255,255,255,0.8);">Тема: "${postTheme}"</p>
-                    </div>
-                    <p class="photo-caption">Автоматично підібране фото за темою: "${postTheme}"</p>
+                    <img src="${unsplashUrl}" alt="${postTheme}" style="width:100%; border-radius:10px;">
+                    <p class="photo-caption">Автоматично підібране фото за темою: "${searchQuery}"</p>
                 </div>`;
             }
 
-            const hashtags = generateHashtags(companyName, postTheme);
-            
-            const postText = postDetails 
-                ? `<div class="post-text">${postDetails}</div>`
-                : `<div class="post-text">
-                        <p>🎉 <strong>Спеціальна пропозиція від ${companyName}!</strong> 🎉</p>
-                        <p>${postTheme}. Не пропустіть унікальну можливість скористатися нашими послугами. Заходьте до нас або телефонуйте для отримання деталей.</p>
-                   </div>`;
+            // Генеруємо хештеги
+            const hashtags = generateHashtags(companyName, postTheme, personDescription);
 
             return `
 <!DOCTYPE html>
@@ -1979,7 +1950,9 @@
         <div class="post-content">
             ${photoSection}
             
-            ${postText}
+            <div class="post-text">
+                <p>${postText.replace(/\n/g, '<br>')}</p>
+            </div>
             
             <div class="post-details">
                 <h3>📋 Деталі пропозиції:</h3>
@@ -2007,11 +1980,11 @@
 </html>`;
         }
 
-        function generateHashtags(companyName, theme) {
+        function generateHashtags(companyName, theme, description = '') {
             const companyTag = companyName.replace(/[^a-zA-Zа-яА-ЯїЇєЄіІґҐ0-9]/g, '').toLowerCase();
             const themeWords = theme.toLowerCase().split(' ').filter(word => word.length > 2).slice(0, 3);
             
-            const baseHashtags = [
+            let hashtags = [
                 `#${companyTag}`,
                 `#${companyTag}Україна`,
                 '#україна',
@@ -2020,308 +1993,31 @@
                 '#акція',
                 '#спецпропозиція',
                 '#соціальнімережі',
-                '#маркетинг'
+                '#маркетинг',
+                '#digital',
+                '#реклама',
+                '#генераціяконтенту'
             ];
             
+            // Додаємо хештеги з теми
             themeWords.forEach(word => {
                 if(word.length > 2) {
-                    baseHashtags.push(`#${word}`);
+                    hashtags.push(`#${word}`);
                 }
             });
             
-            return baseHashtags.slice(0, 10);
-        }
-
-        window.onload = function() {
-            const container = document.getElementById('stars-container');
-            for(let i=0; i<150; i++) {
-                const star = document.createElement('div');
-                star.className = 'star ' + (Math.random() < 0.5 ? 'small' : 'medium');
-                star.style.left = Math.random() * 100 + 'vw';
-                star.style.top = Math.random() * 100 + 'vh';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                container.appendChild(star);
-            }
-
-            if (typeof google !== 'undefined') {
-                google.accounts.id.initialize({
-                    client_id: GOOGLE_CLIENT_ID,
-                    callback: handleCredentialResponse,
-                    auto_select: false,
-                    cancel_on_tap_outside: true
+            // Додаємо хештеги з опису (якщо є)
+            if(description) {
+                const descWords = description.match(/\b(\w{4,})\b/g) || [];
+                descWords.slice(0, 3).forEach(word => {
+                    hashtags.push(`#${word}`);
                 });
             }
-
-            document.getElementById('start-button')?.addEventListener('click', () => goToPage('info-page'));
-            document.querySelector('.info-back-btn')?.addEventListener('click', () => goToPage('main-page'));
-            document.querySelector('.info-continue-btn')?.addEventListener('click', () => goToPage('pricing-page'));
-            document.querySelector('.pricing-back-btn')?.addEventListener('click', () => goToPage('info-page'));
-            document.querySelector('.login-btn')?.addEventListener('click', () => goToPage('login-page'));
-            document.querySelector('.register-btn')?.addEventListener('click', () => goToPage('register-page'));
-            document.querySelectorAll('.auth-back-btn').forEach(btn => btn.addEventListener('click', () => goToPage('main-page')));
-            document.querySelector('.profile-btn')?.addEventListener('click', () => goToPage('profile-page'));
-            document.querySelector('.profile-back-btn')?.addEventListener('click', () => goToPage('main-page'));
-            document.querySelector('.post-back-btn')?.addEventListener('click', () => goToPage('main-page'));
-            document.querySelector('.website-back-btn')?.addEventListener('click', () => goToPage('main-page'));
             
-            document.querySelector('.logout-btn')?.addEventListener('click', () => {
-                isLoggedIn = false;
-                updateAuthButtons();
-                goToPage('main-page');
-            });
-
-            // Вибір плану з визначенням типу
-            document.querySelectorAll('.select-plan').forEach(button => {
-                button.addEventListener('click', function() {
-                    selectedPlan = this.getAttribute('data-plan');
-                    selectedPrice = this.getAttribute('data-price');
-                    selectedPlanType = this.getAttribute('data-type'); // 'post' або 'website'
-                    
-                    document.getElementById('selected-plan').textContent = selectedPlan;
-                    document.getElementById('selected-price').textContent = selectedPrice;
-                    document.getElementById('pay-amount').textContent = selectedPrice;
-                    goToPage('payment-page');
-                });
-            });
-
-            // Генерація сайту
-            document.getElementById('website-form')?.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const companyName = document.getElementById('company_name').value;
-                const companyActivity = document.getElementById('company_activity').value;
-                const companyWishes = document.getElementById('company_wishes').value;
-                const pageCount = parseInt(document.getElementById('page_count').value);
-                
-                if (!companyName || !companyActivity) {
-                    alert('Будь ласка, заповніть обов\'язкові поля');
-                    return;
-                }
-                
-                goToPage('loading-page');
-                startLoading('website', {companyName, companyActivity, companyWishes, pageCount});
-            });
-
-            // ОПЛАТА - тепер перехід залежить від типу плану
-            document.getElementById('payment-form').onsubmit = (e) => {
-                e.preventDefault();
-                document.getElementById('pay-button').textContent = "Оплата...";
-                setTimeout(() => {
-                    document.getElementById('pay-button').textContent = "СПЛАТИТИ";
-                    
-                    // Перевіряємо тип обраного плану
-                    if (selectedPlanType === 'post') {
-                        goToPage('post-page');
-                    } else if (selectedPlanType === 'website') {
-                        goToPage('website-page');
-                    } else {
-                        // За замовчуванням - на сторінку сайту
-                        goToPage('website-page');
-                    }
-                }, 1000);
-            };
-
-            // Генерація поста
-            document.getElementById('post-form')?.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const companyName = document.getElementById('company_name_post').value;
-                const postTheme = document.getElementById('post_theme').value;
-                const postDetails = document.getElementById('post_details').value;
-                const photoSource = document.querySelector('input[name="photo-source"]:checked').value;
-                const imageFile = document.getElementById('post_image').files[0];
-                
-                if (!companyName || !postTheme) {
-                    alert('Будь ласка, заповніть назву компанії та тему поста');
-                    return;
-                }
-                
-                goToPage('loading-page');
-                
-                // Якщо завантажено фото, читаємо його як Data URL
-                if (photoSource === 'upload' && imageFile) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        startLoading('post', {
-                            companyName,
-                            postTheme,
-                            postDetails,
-                            photoSource,
-                            uploadedImage: e.target.result
-                        });
-                    };
-                    reader.readAsDataURL(imageFile);
-                } else {
-                    startLoading('post', {
-                        companyName,
-                        postTheme,
-                        postDetails,
-                        photoSource,
-                        uploadedImage: null
-                    });
-                }
-            });
-
-            document.querySelectorAll('.auth-form').forEach(f => {
-                f.onsubmit = (e) => {
-                    e.preventDefault();
-                    fakeLogin("Користувач", "email@test.com");
-                }
-            });
-
-            // Кнопки успіху
-            document.querySelector('.preview-btn')?.addEventListener('click', function() {
-                if (generatedWebsiteCode) {
-                    previewGeneratedWebsite();
-                } else if (generatedPostContent) {
-                    previewGeneratedPost();
-                }
-            });
-
-            document.querySelector('.download-btn')?.addEventListener('click', function() {
-                if (generatedWebsiteCode) {
-                    downloadGeneratedWebsite();
-                } else if (generatedPostContent) {
-                    downloadGeneratedPost();
-                }
-            });
-
-            document.querySelector('.home-btn')?.addEventListener('click', () => goToPage('main-page'));
-
-            // Логіка для вибору фото
-            document.getElementById('upload-radio').addEventListener('change', function() {
-                if (this.checked) {
-                    document.getElementById('file-upload-area').classList.remove('hidden');
-                    document.getElementById('upload-option').classList.add('active');
-                    document.getElementById('auto-option').classList.remove('active');
-                }
-            });
-
-            document.getElementById('auto-radio').addEventListener('change', function() {
-                if (this.checked) {
-                    document.getElementById('file-upload-area').classList.add('hidden');
-                    document.getElementById('auto-option').classList.add('active');
-                    document.getElementById('upload-option').classList.remove('active');
-                    document.getElementById('image-preview').style.display = 'none';
-                }
-            });
-
-            document.getElementById('post_image').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const preview = document.getElementById('image-preview');
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        };
-
-        function startLoading(type, data) {
-            const progressBar = document.getElementById('progress-bar');
-            const progressPercent = document.getElementById('progress-percent');
-            const loadingText = document.getElementById('loading-text');
-            
-            progressBar.style.width = '0%';
-            progressPercent.textContent = '0%';
-            
-            loadingText.textContent = type === 'website' 
-                ? 'Йде створення вашого сайту...' 
-                : 'Йде створення вашого поста...';
-            
-            let progress = 0;
-            const totalTime = 30000;
-            const intervalTime = 100;
-            const increment = (intervalTime / totalTime) * 100;
-            
-            const interval = setInterval(() => {
-                progress += increment;
-                if (progress > 100) progress = 100;
-                
-                progressBar.style.width = progress + '%';
-                progressPercent.textContent = Math.round(progress) + '%';
-                
-                if (progress >= 20) {
-                    document.getElementById('step1').textContent = '✓';
-                    document.getElementById('step1').style.color = '#00ff00';
-                }
-                if (progress >= 40) {
-                    document.getElementById('step2').textContent = '✓';
-                    document.getElementById('step2').style.color = '#00ff00';
-                }
-                if (progress >= 70) {
-                    document.getElementById('step3').textContent = '✓';
-                    document.getElementById('step3').style.color = '#00ff00';
-                }
-                if (progress >= 95) {
-                    document.getElementById('step4').textContent = '✓';
-                    document.getElementById('step4').style.color = '#00ff00';
-                }
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        if (type === 'website') {
-                            generatedWebsiteCode = generateWebsiteWithAI(
-                                data.companyName, 
-                                data.companyActivity, 
-                                data.companyWishes, 
-                                data.pageCount
-                            );
-                            document.getElementById('success-message').textContent = 
-                                `Ваш сайт "${data.companyName}" успішно згенеровано!`;
-                        } else if (type === 'post') {
-                            generatedPostContent = generatePostWithAI(
-                                data.companyName,
-                                data.postTheme,
-                                data.postDetails,
-                                data.photoSource,
-                                data.uploadedImage
-                            );
-                            document.getElementById('success-message').textContent = 
-                                `Пост для "${data.companyName}" успішно згенеровано!`;
-                        }
-                        goToPage('success-page');
-                    }, 500);
-                }
-            }, intervalTime);
+            // Видаляємо дублікати та обмежуємо кількість
+            return [...new Set(hashtags)].slice(0, 12);
         }
 
-        // Функції для перегляду та завантаження
-        function previewGeneratedWebsite() {
-            const newWindow = window.open();
-            newWindow.document.write(generatedWebsiteCode);
-            newWindow.document.close();
-        }
-
-        function downloadGeneratedWebsite() {
-            const element = document.createElement('a');
-            const file = new Blob([generatedWebsiteCode], {type: 'text/html'});
-            element.href = URL.createObjectURL(file);
-            element.download = `${document.getElementById('company_name')?.value.replace(/\s+/g, '_') || 'website'}_site.html`;
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
-
-        function previewGeneratedPost() {
-            const newWindow = window.open();
-            newWindow.document.write(generatedPostContent);
-            newWindow.document.close();
-        }
-
-        function downloadGeneratedPost() {
-            const element = document.createElement('a');
-            const file = new Blob([generatedPostContent], {type: 'text/html'});
-            element.href = URL.createObjectURL(file);
-            element.download = `post_${document.getElementById('company_name_post')?.value.replace(/\s+/g, '_') || 'post'}.html`;
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
-
-        // Функції генерації сайту (залишаємо без змін)
         function generateWebsiteWithAI(companyName, companyActivity, companyWishes, pageCount) {
             const wishes = analyzeWishes(companyWishes);
             const pages = [];
@@ -2463,6 +2159,296 @@
                 completeHTML += `\n\n\n${page.content}\n`;
             });
             return completeHTML;
+        }
+
+        window.onload = function() {
+            const container = document.getElementById('stars-container');
+            for(let i=0; i<150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star ' + (Math.random() < 0.5 ? 'small' : 'medium');
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(star);
+            }
+
+            if (typeof google !== 'undefined') {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+            }
+
+            document.getElementById('start-button')?.addEventListener('click', () => goToPage('info-page'));
+            document.querySelector('.info-back-btn')?.addEventListener('click', () => goToPage('main-page'));
+            document.querySelector('.info-continue-btn')?.addEventListener('click', () => goToPage('pricing-page'));
+            document.querySelector('.pricing-back-btn')?.addEventListener('click', () => goToPage('info-page'));
+            document.querySelector('.login-btn')?.addEventListener('click', () => goToPage('login-page'));
+            document.querySelector('.register-btn')?.addEventListener('click', () => goToPage('register-page'));
+            document.querySelectorAll('.auth-back-btn').forEach(btn => btn.addEventListener('click', () => goToPage('main-page')));
+            document.querySelector('.profile-btn')?.addEventListener('click', () => goToPage('profile-page'));
+            document.querySelector('.profile-back-btn')?.addEventListener('click', () => goToPage('main-page'));
+            document.querySelector('.post-back-btn')?.addEventListener('click', () => goToPage('main-page'));
+            document.querySelector('.website-back-btn')?.addEventListener('click', () => goToPage('main-page'));
+            
+            document.querySelector('.logout-btn')?.addEventListener('click', () => {
+                isLoggedIn = false;
+                updateAuthButtons();
+                goToPage('main-page');
+            });
+
+            // Вибір плану з визначенням типу
+            document.querySelectorAll('.select-plan').forEach(button => {
+                button.addEventListener('click', function() {
+                    selectedPlan = this.getAttribute('data-plan');
+                    selectedPrice = this.getAttribute('data-price');
+                    selectedPlanType = this.getAttribute('data-type');
+                    
+                    document.getElementById('selected-plan').textContent = selectedPlan;
+                    document.getElementById('selected-price').textContent = selectedPrice;
+                    document.getElementById('pay-amount').textContent = selectedPrice;
+                    goToPage('payment-page');
+                });
+            });
+
+            // Генерація сайту
+            document.getElementById('website-form')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const companyName = document.getElementById('company_name').value;
+                const companyActivity = document.getElementById('company_activity').value;
+                const companyWishes = document.getElementById('company_wishes').value;
+                const pageCount = parseInt(document.getElementById('page_count').value);
+                
+                if (!companyName || !companyActivity) {
+                    alert('Будь ласка, заповніть обов\'язкові поля');
+                    return;
+                }
+                
+                goToPage('loading-page');
+                startLoading('website', {companyName, companyActivity, companyWishes, pageCount});
+            });
+
+            // ОПЛАТА - перехід залежно від типу плану
+            document.getElementById('payment-form').onsubmit = (e) => {
+                e.preventDefault();
+                document.getElementById('pay-button').textContent = "Оплата...";
+                setTimeout(() => {
+                    document.getElementById('pay-button').textContent = "СПЛАТИТИ";
+                    
+                    if (selectedPlanType === 'post') {
+                        goToPage('post-page');
+                    } else if (selectedPlanType === 'website') {
+                        goToPage('website-page');
+                    } else {
+                        goToPage('website-page');
+                    }
+                }, 1000);
+            };
+
+            // Оновлена обробка форми створення поста
+            document.getElementById('post-form')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const companyName = document.getElementById('company_name_post').value;
+                const postTheme = document.getElementById('post_theme').value;
+                const personDescription = document.getElementById('person_description').value;
+                const postDetails = document.getElementById('post_details').value;
+                const photoSource = document.querySelector('input[name="photo-source"]:checked').value;
+                const imageFile = document.getElementById('post_image').files[0];
+                
+                if (!companyName || !postTheme) {
+                    alert('Будь ласка, заповніть назву компанії та тему поста');
+                    return;
+                }
+                
+                goToPage('loading-page');
+                
+                if (photoSource === 'upload' && imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        startLoading('post', {
+                            companyName,
+                            postTheme,
+                            personDescription,
+                            postDetails,
+                            photoSource,
+                            uploadedImage: e.target.result
+                        });
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    startLoading('post', {
+                        companyName,
+                        postTheme,
+                        personDescription,
+                        postDetails,
+                        photoSource,
+                        uploadedImage: null
+                    });
+                }
+            });
+
+            document.querySelectorAll('.auth-form').forEach(f => {
+                f.onsubmit = (e) => {
+                    e.preventDefault();
+                    fakeLogin("Користувач", "email@test.com");
+                }
+            });
+
+            // Кнопки успіху
+            document.querySelector('.preview-btn')?.addEventListener('click', function() {
+                if (generatedWebsiteCode) {
+                    previewGeneratedWebsite();
+                } else if (generatedPostContent) {
+                    previewGeneratedPost();
+                }
+            });
+
+            document.querySelector('.download-btn')?.addEventListener('click', function() {
+                if (generatedWebsiteCode) {
+                    downloadGeneratedWebsite();
+                } else if (generatedPostContent) {
+                    downloadGeneratedPost();
+                }
+            });
+
+            document.querySelector('.home-btn')?.addEventListener('click', () => goToPage('main-page'));
+
+            // Логіка для вибору фото
+            document.getElementById('upload-radio').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('file-upload-area').classList.remove('hidden');
+                    document.getElementById('upload-option').classList.add('active');
+                    document.getElementById('auto-option').classList.remove('active');
+                }
+            });
+
+            document.getElementById('auto-radio').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('file-upload-area').classList.add('hidden');
+                    document.getElementById('auto-option').classList.add('active');
+                    document.getElementById('upload-option').classList.remove('active');
+                    document.getElementById('image-preview').style.display = 'none';
+                }
+            });
+
+            document.getElementById('post_image').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('image-preview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        };
+
+        function startLoading(type, data) {
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercent = document.getElementById('progress-percent');
+            const loadingText = document.getElementById('loading-text');
+            
+            progressBar.style.width = '0%';
+            progressPercent.textContent = '0%';
+            
+            loadingText.textContent = type === 'website' 
+                ? 'Йде створення вашого сайту...' 
+                : 'Йде створення вашого поста...';
+            
+            let progress = 0;
+            const totalTime = 30000;
+            const intervalTime = 100;
+            const increment = (intervalTime / totalTime) * 100;
+            
+            const interval = setInterval(() => {
+                progress += increment;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                progressPercent.textContent = Math.round(progress) + '%';
+                
+                if (progress >= 20) {
+                    document.getElementById('step1').textContent = '✓';
+                    document.getElementById('step1').style.color = '#00ff00';
+                }
+                if (progress >= 40) {
+                    document.getElementById('step2').textContent = '✓';
+                    document.getElementById('step2').style.color = '#00ff00';
+                }
+                if (progress >= 70) {
+                    document.getElementById('step3').textContent = '✓';
+                    document.getElementById('step3').style.color = '#00ff00';
+                }
+                if (progress >= 95) {
+                    document.getElementById('step4').textContent = '✓';
+                    document.getElementById('step4').style.color = '#00ff00';
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        if (type === 'website') {
+                            generatedWebsiteCode = generateWebsiteWithAI(
+                                data.companyName, 
+                                data.companyActivity, 
+                                data.companyWishes, 
+                                data.pageCount
+                            );
+                            document.getElementById('success-message').textContent = 
+                                `Ваш сайт "${data.companyName}" успішно згенеровано!`;
+                        } else if (type === 'post') {
+                            generatedPostContent = generatePostWithAI(
+                                data.companyName,
+                                data.postTheme,
+                                data.personDescription,
+                                data.postDetails,
+                                data.photoSource,
+                                data.uploadedImage
+                            );
+                            document.getElementById('success-message').textContent = 
+                                `Пост для "${data.companyName}" успішно згенеровано!`;
+                        }
+                        goToPage('success-page');
+                    }, 500);
+                }
+            }, intervalTime);
+        }
+
+        // Функції для перегляду та завантаження
+        function previewGeneratedWebsite() {
+            const newWindow = window.open();
+            newWindow.document.write(generatedWebsiteCode);
+            newWindow.document.close();
+        }
+
+        function downloadGeneratedWebsite() {
+            const element = document.createElement('a');
+            const file = new Blob([generatedWebsiteCode], {type: 'text/html'});
+            element.href = URL.createObjectURL(file);
+            element.download = `${document.getElementById('company_name')?.value.replace(/\s+/g, '_') || 'website'}_site.html`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function previewGeneratedPost() {
+            const newWindow = window.open();
+            newWindow.document.write(generatedPostContent);
+            newWindow.document.close();
+        }
+
+        function downloadGeneratedPost() {
+            const element = document.createElement('a');
+            const file = new Blob([generatedPostContent], {type: 'text/html'});
+            element.href = URL.createObjectURL(file);
+            element.download = `post_${document.getElementById('company_name_post')?.value.replace(/\s+/g, '_') || 'post'}.html`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
         }
     </script>
 </body>
